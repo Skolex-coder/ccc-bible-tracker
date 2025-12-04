@@ -1192,7 +1192,7 @@
         function updateMarkWeekButton() {
             const btn = document.getElementById('markWeekBtn');
             if (isWeekComplete()) {
-                btn.textContent = '✓ Week Complete';
+                btn.textContent = '✓ Week Complete - Click to Undo';
                 btn.classList.add('done');
             } else {
                 btn.textContent = 'Mark This Week Complete';
@@ -1200,12 +1200,15 @@
             }
         }
 
-        // Mark entire week as read
+        // Mark entire week as read or unread (toggle)
         function markWeekAsRead() {
             const weekData = cccReadingPlan[currentWeek];
+            const isComplete = isWeekComplete();
+            
+            // Toggle: if complete, unmark; if incomplete, mark
             weekData.readings.forEach(reading => {
                 reading.chapters.forEach(chapter => {
-                    markChapterRead(reading.book, chapter, true);
+                    markChapterRead(reading.book, chapter, !isComplete);
                 });
             });
             saveProgress();
