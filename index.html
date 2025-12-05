@@ -4,1381 +4,461 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#2563eb">
     <title>CCC Bible Tracker</title>
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ0NDIEJpYmxlIFRyYWNrZXIiLCJzaG9ydF9uYW1lIjoiQ0NDIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmOWZhZmIiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsInN0YXJ0X3VybCI6Ii4vIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmclMjB4bWxucyUzRCdodHRwJTNBJTJGJTJGd3d3LnczLm9yZyUyRjIwMDAlMkZzdmcnJTIwdmlld0JveCUzRCcwJTIwMCUyMDEwMCUyMDEwMCclM0UlM0NyZWN0JTIwd2lkdGglM0QnMTAwJyUyMGhlaWdodCUzRCcxMDAnJTIwZmlsbCUzRCclMjMyNTYzZWInJTJGJTNFJTNDdGV4dCUyMHglM0QnNTAlMjUnJTIweSUzRCc1MCUyNSclMjBmb250LXNpemUlM0QnNjAnJTIwZmlsbCUzRCclMjNmZmYnJTIwdGV4dC1hbmNob3IlM0QnbWlkZGxlJyUyMGRvbWluYW50LWJhc2VsaW5lJTNEJ21pZGRsZSclMjBmb250LWZhbWlseSUzRCdBcmlhbCclM0VDJTNDJTJGdGV4dCUzRSUzQyUyRnN2ZyUzRSIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #1f2937;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #f9fafb;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .week-selector {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .week-selector h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #1f2937;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 16px;
-            background: white;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .overall-progress {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .progress-header h3 {
-            font-size: 16px;
-            color: #1f2937;
-        }
-
-        .progress-percent {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2563eb;
-        }
-
-        .progress-bar-container {
-            height: 30px;
-            background: #e5e7eb;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
-            border-radius: 15px;
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2563eb;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
-        .books-container {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .books-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .books-header h3 {
-            font-size: 16px;
-            color: #1f2937;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 5px;
-            background: #f3f4f6;
-            padding: 4px;
-            border-radius: 8px;
-        }
-
-        .view-toggle button {
-            padding: 6px 12px;
-            border: none;
-            background: transparent;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            color: #6b7280;
-        }
-
-        .view-toggle button.active {
-            background: white;
-            color: #2563eb;
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .book-item {
-            padding: 15px;
-            border-bottom: 1px solid #f3f4f6;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .book-item:hover {
-            background: #f9fafb;
-        }
-
-        .book-item:last-child {
-            border-bottom: none;
-        }
-
-        .book-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .book-name {
-            font-weight: 600;
-            font-size: 15px;
-            color: #1f2937;
-        }
-
-        .book-progress {
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        .book-progress-bar {
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .book-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        .chapters-view {
-            display: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .chapters-view.open {
-            display: block;
-        }
-
-        .chapters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .chapter-box {
-            aspect-ratio: 1;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #6b7280;
-            background: white;
-        }
-
-        .chapter-box:hover {
-            border-color: #2563eb;
-            transform: scale(1.05);
-        }
-
-        .chapter-box.read {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            color: white;
-            border-color: #2563eb;
-        }
-
-        .chapter-box.current-week {
-            border-color: #f59e0b;
-            border-width: 3px;
-        }
-
-        .chapter-box.read.current-week {
-            box-shadow: 0 0 0 3px #f59e0b;
-        }
-
-        .week-reading {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .week-reading h3 {
-            font-size: 16px;
-            color: #92400e;
-            margin-bottom: 10px;
-        }
-
-        .week-reading-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .reading-item {
-            background: white;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #1f2937;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mark-read-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .mark-read-btn:hover {
-            background: #1e40af;
-            transform: translateY(-1px);
-        }
-
-        .mark-read-btn.done {
-            background: #10b981;
-        }
-
-        .reset-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            transition: all 0.2s;
-        }
-
-        .reset-btn:hover {
-            background: #dc2626;
-        }
-
-        .expandable-icon {
-            display: inline-block;
-            transition: transform 0.2s;
-            margin-left: 8px;
-            color: #9ca3af;
-        }
-
-        .expandable-icon.open {
-            transform: rotate(180deg);
-        }
-
-        @media (max-width: 640px) {
-            body {
-                padding: 10px;
-            }
-
-            .header {
-                padding: 20px 15px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .content {
-                padding: 15px;
-            }
-
-            .chapters-grid {
-                grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
-                gap: 6px;
-            }
-        }
-
-        .legend {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            padding: 10px;
-            background: #f9fafb;
-            border-radius: 8px;
-            font-size: 12px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-
-        .legend-box.current {
-            border: 3px solid #f59e0b;
-            background: white;
-        }
-
-        .legend-box.read {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-        }
+:root{--bg-gradient-1:#667eea;--bg-gradient-2:#764ba2;--bg-primary:#f9fafb;--bg-secondary:#fff;--bg-tertiary:#f3f4f6;--text-primary:#1f2937;--text-secondary:#6b7280;--text-tertiary:#9ca3af;--border-color:#e5e7eb;--accent-color:#2563eb;--accent-hover:#1e40af;--shadow:rgba(0,0,0,.1);--shadow-heavy:rgba(0,0,0,.3)}
+[data-theme=dark]{--bg-gradient-1:#1e293b;--bg-gradient-2:#0f172a;--bg-primary:#1e293b;--bg-secondary:#334155;--bg-tertiary:#475569;--text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-tertiary:#94a3b8;--border-color:#475569;--accent-color:#3b82f6;--accent-hover:#2563eb;--shadow:rgba(0,0,0,.3);--shadow-heavy:rgba(0,0,0,.5)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,var(--bg-gradient-1) 0%,var(--bg-gradient-2) 100%);min-height:100vh;padding:20px;color:var(--text-primary);transition:background .3s}
+.container{max-width:800px;margin:0 auto;background:var(--bg-primary);border-radius:20px;box-shadow:0 20px 60px var(--shadow-heavy);overflow:hidden}
+.header{background:linear-gradient(135deg,var(--accent-color) 0%,var(--accent-hover) 100%);color:#fff;padding:30px 20px;text-align:center;position:relative}
+.header h1{font-size:28px;margin-bottom:10px;font-weight:700}
+.header p{opacity:.9;font-size:14px}
+.dark-mode-toggle{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .3s}
+.dark-mode-toggle:hover{background:rgba(255,255,255,.3);transform:scale(1.1)}
+.content{padding:20px}
+.week-selector{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px var(--shadow)}
+.week-selector h2{font-size:18px;margin-bottom:15px;color:var(--text-primary)}
+select{width:100%;padding:12px;border:2px solid var(--border-color);border-radius:8px;font-size:16px;background:var(--bg-primary);color:var(--text-primary);cursor:pointer}
+.memory-verse{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(245,158,11,.3);color:#78350f}
+.memory-verse h3{font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;opacity:.8}
+.memory-verse-text{font-size:18px;font-weight:600;line-height:1.6;font-style:italic}
+.five-to-thrive{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px var(--shadow)}
+.five-to-thrive h3{font-size:18px;color:var(--text-primary);margin-bottom:15px}
+.question-item{padding:12px;background:var(--bg-tertiary);border-radius:8px;font-size:14px;color:var(--text-primary);line-height:1.5;border-left:3px solid var(--accent-color);margin-bottom:10px}
+.week-reading{background:#fef3c7;border-left:4px solid #f59e0b;padding:15px;border-radius:8px;margin-bottom:20px}
+[data-theme=dark] .week-reading{background:#422006;color:#fef3c7}
+.reading-item{background:#fff;padding:10px;border-radius:6px;font-size:14px;margin-bottom:8px}
+[data-theme=dark] .reading-item{background:var(--bg-tertiary);color:var(--text-primary)}
+.mark-read-btn{background:var(--accent-color);color:#fff;border:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
+.mark-read-btn.done{background:#10b981}
+.overall-progress{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px var(--shadow)}
+.progress-header{display:flex;justify-content:space-between;margin-bottom:12px}
+.progress-percent{font-size:20px;font-weight:700;color:var(--accent-color)}
+.progress-bar-container{height:30px;background:var(--bg-tertiary);border-radius:15px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent-color) 0%,#7c3aed 100%);transition:width .3s}
+.stats{display:flex;justify-content:space-around;margin-top:15px;padding-top:15px;border-top:1px solid var(--border-color)}
+.stat-number{font-size:24px;font-weight:700;color:var(--accent-color)}
+.stat-label{font-size:12px;color:var(--text-secondary)}
+.reminder-section{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px var(--shadow)}
+.reminder-row{display:flex;gap:10px;margin-bottom:10px}
+.reminder-row input,.reminder-row select{flex:1;padding:10px;border:2px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary)}
+.reminder-row button{padding:10px 20px;background:var(--accent-color);color:#fff;border:none;border-radius:8px;cursor:pointer}
+.books-container{background:var(--bg-secondary);border-radius:12px;padding:20px;box-shadow:0 2px 8px var(--shadow)}
+.book-item{padding:15px;border-bottom:1px solid var(--bg-tertiary);cursor:pointer}
+.book-header{display:flex;justify-content:space-between;margin-bottom:8px}
+.book-progress-bar{height:6px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden}
+.book-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-color) 0%,#7c3aed 100%)}
+.chapters-view{display:none;margin-top:10px}
+.chapters-view.open{display:block}
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:8px;margin-top:10px}
+.chapter-box{aspect-ratio:1;border:2px solid var(--border-color);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;background:var(--bg-secondary)}
+.chapter-box.read{background:linear-gradient(135deg,var(--accent-color) 0%,#7c3aed 100%);color:#fff}
+.chapter-box.current-week{border-color:#f59e0b;border-width:3px}
+.chapter-box.not-current-week{opacity:.3}
+.chapter-box.read.not-current-week{opacity:.5}
+.reset-btn{background:#ef4444;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:20px;width:100%}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📖 CCC Bible Tracker</h1>
-            <p>Character-Charged Christianity Reading Plan</p>
-        </div>
+<div class="container">
+<div class="header">
+<button class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
+<h1>📖 CCC Bible Tracker</h1>
+<p>Character-Charged Christianity</p>
+</div>
+<div class="content">
+<div class="week-selector">
+<h2>Current Week</h2>
+<select id="weekSelect" onchange="updateWeek()"></select>
+</div>
+<div class="memory-verse" id="memoryVerse" style="display:none">
+<h3>📜 MEMORY VERSE</h3>
+<div class="memory-verse-text" id="memoryVerseText"></div>
+</div>
+<div class="five-to-thrive" id="fiveToThrive" style="display:none">
+<h3>🎯 5 To Thrive</h3>
+<div id="questionList"></div>
+</div>
+<div class="week-reading" id="weekReading" style="display:none">
+<h3 id="weekTitle"></h3>
+<div id="weekReadingList"></div>
+<button class="mark-read-btn" onclick="markWeekAsRead()" id="markWeekBtn">Mark Week Complete</button>
+</div>
+<div class="overall-progress">
+<div class="progress-header">
+<h3>Overall Progress</h3>
+<div class="progress-percent" id="overallPercent">0%</div>
+</div>
+<div class="progress-bar-container">
+<div class="progress-bar" id="overallProgressBar" style="width:0%"></div>
+</div>
+<div class="stats">
+<div><div class="stat-number" id="chaptersRead">0</div><div class="stat-label">Chapters</div></div>
+<div><div class="stat-number" id="booksCompleted">0</div><div class="stat-label">Books</div></div>
+</div>
+</div>
+<div class="reminder-section">
+<h3>⏰ Reading Reminder</h3>
+<div class="reminder-row">
+<select id="reminderFrequency"><option value="daily">Daily</option><option value="weekly">Weekly</option></select>
+<input type="time" id="reminderTime" value="08:00">
+<button onclick="setReminder()">Set</button>
+</div>
+<div style="font-size:13px;color:var(--text-secondary)" id="reminderStatus">No reminder set</div>
+</div>
+<div class="books-container">
+<h3 style="margin-bottom:15px">Books of the Bible</h3>
+<div id="booksContainer"></div>
+</div>
+<button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+</div>
+</div>
+<script>
+const bibleData={"Genesis":50,"Exodus":40,"Leviticus":27,"Numbers":36,"Deuteronomy":34,"Joshua":24,"Judges":21,"Ruth":4,"1 Samuel":31,"2 Samuel":24,"1 Kings":22,"2 Kings":25,"1 Chronicles":29,"2 Chronicles":36,"Ezra":10,"Nehemiah":13,"Esther":10,"Job":42,"Psalms":150,"Proverbs":31,"Ecclesiastes":12,"Song of Songs":8,"Isaiah":66,"Jeremiah":52,"Lamentations":5,"Ezekiel":48,"Daniel":12,"Hosea":14,"Joel":3,"Amos":9,"Obadiah":1,"Jonah":4,"Micah":7,"Nahum":3,"Habakkuk":3,"Zephaniah":3,"Haggai":2,"Zechariah":14,"Malachi":4,"Matthew":28,"Mark":16,"Luke":24,"John":21,"Acts":28,"Romans":16,"1 Corinthians":16,"2 Corinthians":13,"Galatians":6,"Ephesians":6,"Philippians":4,"Colossians":4,"1 Thessalonians":5,"2 Thessalonians":3,"1 Timothy":6,"2 Timothy":4,"Titus":3,"Philemon":1,"Hebrews":13,"James":5,"1 Peter":5,"2 Peter":3,"1 John":5,"2 John":1,"3 John":1,"Jude":1,"Revelation":22};
 
-        <div class="content">
-            <div class="week-selector">
-                <h2>Current Week</h2>
-                <select id="weekSelect" onchange="updateWeek()">
-                    <!-- Weeks will be populated by JavaScript -->
-                </select>
-            </div>
+const cccReadingPlan={
+1:{title:"Identity & Design",memoryVerse:"Genesis 1:27",fiveToThrive:["Where is our identity most contested?","What daily practice restores our dignity?","What lie about freedom/sexuality do we reject?","Where do we see the Spirit renewing creation?","Actionable Awe: One bodily act of honour this week"],readings:[{book:"Matthew",chapters:[1,2]},{book:"Genesis",chapters:[1,2,3,4,5]},{book:"Romans",chapters:[5]},{book:"1 Corinthians",chapters:[15]},{book:"Psalms",chapters:[1,2,3]}]},
+2:{title:"New Beginnings (Noah)",memoryVerse:"Acts 2:38",fiveToThrive:["What 'flood' are we navigating?","What covenant promise steadies us?","How mark a genuine restart?","Where build community?","Actionable Awe: Fresh obedience by Thursday"],readings:[{book:"Matthew",chapters:[3,4]},{book:"Genesis",chapters:[6,7,8,9,10,11]},{book:"1 Peter",chapters:[3]},{book:"Acts",chapters:[2]},{book:"Psalms",chapters:[4,5,6]}]},
+3:{title:"Trust & Promise",memoryVerse:"Romans 4:20-21",fiveToThrive:["Where is God calling us?","What promise are we clinging to?","How does faith express practically?","How bless someone outside circle?","Actionable Awe: Faith step this week"],readings:[{book:"Matthew",chapters:[5,6]},{book:"Genesis",chapters:[12,13,14,15,16,17,18]},{book:"Romans",chapters:[4]},{book:"Galatians",chapters:[3]},{book:"Psalms",chapters:[7,8,9]}]},
+4:{title:"Family & Wrestling",memoryVerse:"Genesis 32:28",fiveToThrive:["Where are we wrestling?","How can honesty change posture?","What boundary improves home?","Who needs reconciliation?","Actionable Awe: Make peace this week"],readings:[{book:"Matthew",chapters:[7,8]},{book:"Genesis",chapters:[24,25,26,27,28,29,30,31,32,33]},{book:"Romans",chapters:[9]},{book:"Hebrews",chapters:[11]},{book:"Psalms",chapters:[10,11,12]}]},
+5:{title:"Providence & Resilience",memoryVerse:"Genesis 50:20",fiveToThrive:["Which wound needs reframing?","What gift use faithfully?","How steward influence humbly?","Where forgive without enabling?","Actionable Awe: Redemptive act by Friday"],readings:[{book:"Matthew",chapters:[9,10]},{book:"Genesis",chapters:[37,38,39,40,41,42,43,44,45,46,47,48,49,50]},{book:"Acts",chapters:[7]},{book:"Romans",chapters:[8]},{book:"Psalms",chapters:[13,14,15]}]},
+6:{title:"Deliverance (Exodus)",memoryVerse:"Exodus 14:13-14",fiveToThrive:["What holds us captive?","What Exodus step to take?","Who will walk with us?","How does Passover shape gratitude?","Actionable Awe: Freedom move this week"],readings:[{book:"Matthew",chapters:[11,12]},{book:"Exodus",chapters:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"Hebrews",chapters:[11]},{book:"1 Corinthians",chapters:[5]},{book:"Psalms",chapters:[16,17,18]}]},
+7:{title:"Holiness & Covenant",memoryVerse:"Exodus 19:5-6",fiveToThrive:["Where do law/grace feel tense?","What boundary honours God?","How practice holiness?","Who benefits from obedience?","Actionable Awe: Practice costly holiness"],readings:[{book:"Matthew",chapters:[13,14]},{book:"Exodus",chapters:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Galatians",chapters:[3,4]},{book:"Romans",chapters:[7]},{book:"Psalms",chapters:[19,20,21]}]},
+8:{title:"Presence & Priesthood",memoryVerse:"Hebrews 4:16",fiveToThrive:["How cultivate presence?","What intercession carry?","Where serve as priests?","How honour God with finances?","Actionable Awe: Carry His presence"],readings:[{book:"Matthew",chapters:[15,16]},{book:"Exodus",chapters:[25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]},{book:"Leviticus",chapters:[1,2,3,4,5,6,7]},{book:"Hebrews",chapters:[7,8,9,10]},{book:"Psalms",chapters:[22,23,24]}]},
+9:{title:"Wilderness & Testing",memoryVerse:"Hebrews 4:11",fiveToThrive:["What grumbling to replace?","What rest practice guard?","Which temptation strategy?","Who's accountability mate?","Actionable Awe: Plan replacement habit"],readings:[{book:"Matthew",chapters:[17,18]},{book:"Leviticus",chapters:[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]},{book:"Numbers",chapters:[1,2,3,4,5,6]},{book:"1 Corinthians",chapters:[10]},{book:"Hebrews",chapters:[3,4]},{book:"Psalms",chapters:[25,26,27]}]},
+10:{title:"Guidance & Discernment",memoryVerse:"James 1:5",fiveToThrive:["Where have mixed motives?","What scripture test guidance?","How slow down to hear God?","What counsel seek?","Actionable Awe: Delayed obedience by Sunday"],readings:[{book:"Matthew",chapters:[19,20]},{book:"Numbers",chapters:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"Jude",chapters:[1]},{book:"James",chapters:[1]},{book:"Psalms",chapters:[28,29,30]}]},
+11:{title:"Courage",memoryVerse:"Numbers 23:19",fiveToThrive:["What risk honours God?","How prepare practically?","Who needs encouragement?","Where face fear with prayer?","Actionable Awe: Step into courage"],readings:[{book:"Matthew",chapters:[21,22]},{book:"Numbers",chapters:[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]},{book:"2 Peter",chapters:[2]},{book:"Hebrews",chapters:[11]},{book:"Psalms",chapters:[31,32,33]}]},
+12:{title:"Remember & Renew",memoryVerse:"Deuteronomy 10:12",fiveToThrive:["Which commands feel heavy?","What testimony recount?","What habit needs renewal?","How teach/encourage younger?","Actionable Awe: Build remembrance practice"],readings:[{book:"Matthew",chapters:[23,24]},{book:"Deuteronomy",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]},{book:"Hebrews",chapters:[8,9,10]},{book:"Psalms",chapters:[34,35,36]}]},
+13:{title:"Trust over Control",memoryVerse:"Joshua 1:9",fiveToThrive:["What does obedience look like?","Where are we over-controlling?","How act in faith today?","What support needed?","Actionable Awe: Release control & entrust"],readings:[{book:"Matthew",chapters:[25,26]},{book:"Deuteronomy",chapters:[18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34]},{book:"Joshua",chapters:[1,2,3,4,5,6]},{book:"Romans",chapters:[10]},{book:"James",chapters:[2]},{book:"Psalms",chapters:[37,38,39]}]},
+14:{title:"Loyal Love",memoryVerse:"Ruth 1:16",fiveToThrive:["Where feel societal chaos?","What loyalty show?","How resist cynicism?","Where provide stability?","Actionable Awe: Show up this week"],readings:[{book:"Matthew",chapters:[27,28]},{book:"Joshua",chapters:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Ruth",chapters:[1]},{book:"Hebrews",chapters:[4]},{book:"Acts",chapters:[13]},{book:"Psalms",chapters:[40,41]}]},
+15:{title:"Integrity in Chaos",memoryVerse:"Judges 6:12",fiveToThrive:["What compromise tempts?","How does grace empower integrity?","Where stand apart?","Who benefits from integrity?","Actionable Awe: Take integrity stand"],readings:[{book:"Mark",chapters:[1,2]},{book:"Judges",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"Ruth",chapters:[2]},{book:"Hebrews",chapters:[11]},{book:"James",chapters:[2]},{book:"Psalms",chapters:[42,43,44]}]},
+16:{title:"Listening Leadership",memoryVerse:"1 Samuel 3:10",fiveToThrive:["Where listen before acting?","What failure avoid?","How serve team/family?","What authority steward?","Actionable Awe: Lead by serving"],readings:[{book:"Mark",chapters:[3,4]},{book:"1 Samuel",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]},{book:"Ruth",chapters:[3]},{book:"Acts",chapters:[13]},{book:"2 Corinthians",chapters:[1,2]},{book:"Psalms",chapters:[45,46]}]},
+17:{title:"Calling (David's Rise)",memoryVerse:"1 Samuel 16:7",fiveToThrive:["What gift underused?","What fear blocks calling?","Who can we honour publicly?","Where need courage + humility?","Actionable Awe: Deploy a gift publicly"],readings:[{book:"Mark",chapters:[5,6]},{book:"1 Samuel",chapters:[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},{book:"Romans",chapters:[1]},{book:"Psalms",chapters:[47,48,49]}]},
+18:{title:"Patience, Mercy, Truth",memoryVerse:"Psalm 51:10",fiveToThrive:["Where need to repent?","What repair/restitution right?","Who confess to?","How does mercy change leadership?","Actionable Awe: Tell truth + restitution"],readings:[{book:"Mark",chapters:[7,8]},{book:"2 Samuel",chapters:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"Acts",chapters:[2]},{book:"Romans",chapters:[4]},{book:"Psalms",chapters:[50,51,52,53]}]},
+19:{title:"Trials & Humility",memoryVerse:"1 Peter 5:6",fiveToThrive:["What trial can grow humility?","How resist self-promotion?","Who needs apology?","What practice keeps us low?","Actionable Awe: Take the low seat"],readings:[{book:"Mark",chapters:[9,10]},{book:"2 Samuel",chapters:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"1 Kings",chapters:[1,2]},{book:"1 Peter",chapters:[5]},{book:"Psalms",chapters:[54,55,56]}]},
+20:{title:"Wisdom & Desire",memoryVerse:"1 Kings 3:9",fiveToThrive:["Which desire needs reordering?","What wisdom practice adopt?","How steward wealth ethically?","What friendship sharpens?","Actionable Awe: Reorder a desire"],readings:[{book:"Mark",chapters:[11,12]},{book:"1 Kings",chapters:[3,4,5,6,7,8,9,10,11]},{book:"James",chapters:[1,2,3]},{book:"Psalms",chapters:[57,58,59]}]},
+21:{title:"Faithfulness",memoryVerse:"James 5:16",fiveToThrive:["Where is faith under pressure?","What bold prayer risk?","How care for marginalised?","Where stand true with grace?","Actionable Awe: Bold prayer + action"],readings:[{book:"Mark",chapters:[13,14]},{book:"1 Kings",chapters:[12,13,14,15,16,17,18,19,20,21,22]},{book:"2 Kings",chapters:[1,2]},{book:"James",chapters:[5]},{book:"Luke",chapters:[4]},{book:"Psalms",chapters:[60,61,62]}]},
+22:{title:"Hope under Decline",memoryVerse:"2 Corinthians 7:1",fiveToThrive:["What decline discourages?","How embody hope?","Who needs persistent kindness?","What justice step?","Actionable Awe: Plant hope"],readings:[{book:"Mark",chapters:[15,16]},{book:"2 Kings",chapters:[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]},{book:"Romans",chapters:[11]},{book:"2 Corinthians",chapters:[6,7]},{book:"Psalms",chapters:[63,64,65]}]},
+23:{title:"Temple & Worship",memoryVerse:"1 Chronicles 16:11",fiveToThrive:["What worship anchor?","Integrate praise into work?","Encourage who to worship?","What idol must go?","Actionable Awe: Work into worship"],readings:[{book:"Luke",chapters:[1,2]},{book:"1 Chronicles",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},{book:"Hebrews",chapters:[8,9]},{book:"Psalms",chapters:[66,67,68]}]},
+24:{title:"King & Praise",memoryVerse:"1 Chronicles 29:11",fiveToThrive:["Share God's kindness?","Celebrate publicly?","Honour elders/mentors?","Keep gratitude practice?","Actionable Awe: Offer public praise"],readings:[{book:"Luke",chapters:[3,4]},{book:"1 Chronicles",chapters:[17,18,19,20,21,22,23,24,25,26,27,28,29]},{book:"Acts",chapters:[15]},{book:"Romans",chapters:[15]},{book:"Psalms",chapters:[69,70,71]}]},
+25:{title:"Order & Peace",memoryVerse:"2 Chronicles 7:14",fiveToThrive:["What chaos needs ordering?","Guard relational peace?","What system supports holiness?","Where simplicity invitation?","Actionable Awe: Schedule sanctification"],readings:[{book:"Luke",chapters:[5,6]},{book:"2 Chronicles",chapters:[1,2,3,4,5,6,7,8,9]},{book:"James",chapters:[3]},{book:"Psalms",chapters:[72,73,74]}]},
+26:{title:"Perseverance",memoryVerse:"1 Peter 5:10",fiveToThrive:["Where need resilience?","What builds staying power?","Who encourage under trial?","What distractions cut?","Actionable Awe: Start long obedience"],readings:[{book:"Luke",chapters:[7,8]},{book:"2 Chronicles",chapters:[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]},{book:"1 Peter",chapters:[1,2,3,4,5]},{book:"2 Peter",chapters:[1,2,3]},{book:"Psalms",chapters:[75,76,77]}]},
+27:{title:"Reform",memoryVerse:"2 Chronicles 34:3",fiveToThrive:["What needs cleansing?","Renew worship at home?","Add accountability?","Invite into reform?","Actionable Awe: Cleanse a room"],readings:[{book:"Luke",chapters:[9,10]},{book:"2 Chronicles",chapters:[29,30,31,32,33,34,35,36]},{book:"Romans",chapters:[12]},{book:"Hebrews",chapters:[12]},{book:"Psalms",chapters:[78,79,80]}]},
+28:{title:"Word & Community",memoryVerse:"Ezra 7:10",fiveToThrive:["Honour Scripture daily?","Start group practice?","Invite others?","Celebrate obedience?","Actionable Awe: Build Scripture community"],readings:[{book:"Luke",chapters:[11,12]},{book:"Ezra",chapters:[1,2,3,4,5,6,7,8,9,10]},{book:"Romans",chapters:[9,10,11]},{book:"Psalms",chapters:[81,82,83]}]},
+29:{title:"Building & Boundaries",memoryVerse:"Nehemiah 4:14",fiveToThrive:["What wall/gate needed?","Budget/calendar guard?","Who work beside us?","Respond to criticism?","Actionable Awe: Build a boundary"],readings:[{book:"Luke",chapters:[13,14]},{book:"Nehemiah",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13]},{book:"1 Corinthians",chapters:[3]},{book:"Titus",chapters:[1,2,3]},{book:"Psalms",chapters:[84,85,86]}]},
+30:{title:"Providence & Courage",memoryVerse:"Esther 4:14",fiveToThrive:["Where speak up?","What righteous risk?","Who vulnerable near us?","Prepare wisely how?","Actionable Awe: Advocate for someone"],readings:[{book:"Luke",chapters:[15,16]},{book:"Esther",chapters:[1,2,3,4,5,6,7,8,9,10]},{book:"Romans",chapters:[8]},{book:"1 Peter",chapters:[2]},{book:"Psalms",chapters:[87,88,89]}]},
+31:{title:"Honest Faith (Job 1-21)",memoryVerse:"Job 1:21",fiveToThrive:["Where suffering?","Pray/write lament?","Serve while hurting?","Resist bitterness?","Actionable Awe: Lament + service"],readings:[{book:"Luke",chapters:[17,18]},{book:"Job",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"James",chapters:[1]},{book:"1 Peter",chapters:[1,2]},{book:"Psalms",chapters:[90,91,92]}]},
+32:{title:"Patience & Hope (Job 22-42)",memoryVerse:"Job 23:10",fiveToThrive:["What can't control?","Hopeful patience practice?","Persist in what?","Who cheers us on?","Actionable Awe: Hope with action"],readings:[{book:"Luke",chapters:[19,20]},{book:"Job",chapters:[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]},{book:"Romans",chapters:[5]},{book:"James",chapters:[5]},{book:"Psalms",chapters:[93,94,95]}]},
+33:{title:"Everyday Wisdom",memoryVerse:"Proverbs 3:5-6",fiveToThrive:["Which proverb speaks?","Install what habit?","Guard our tongue?","Who needs wise kindness?","Actionable Awe: Install wise habit"],readings:[{book:"Luke",chapters:[21,22]},{book:"Proverbs",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]},{book:"James",chapters:[1,2,3,4,5]},{book:"Psalms",chapters:[96,97,98]}]},
+34:{title:"Meaning",memoryVerse:"Proverbs 16:3",fiveToThrive:["What task drains?","Do as worship?","Honour relationships?","Pursue purity where?","Actionable Awe: Menial task beautifully"],readings:[{book:"Luke",chapters:[23,24]},{book:"Proverbs",chapters:[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},{book:"Ecclesiastes",chapters:[1,2,3,4,5,6]},{book:"Colossians",chapters:[3]},{book:"Ephesians",chapters:[4,5,6]},{book:"Psalms",chapters:[99,100,101]}]},
+35:{title:"Desire & Meaning",memoryVerse:"Ecclesiastes 12:1",fiveToThrive:["Desire needs dignity?","Meaning beyond consumption?","Creative project?","Honour someone?","Actionable Awe: Schedule holy pursuit"],readings:[{book:"John",chapters:[1]},{book:"Ecclesiastes",chapters:[7,8,9,10,11,12]},{book:"Song of Songs",chapters:[1,2,3,4]},{book:"Ephesians",chapters:[5]},{book:"Revelation",chapters:[21]},{book:"Psalms",chapters:[102,103,104]}]},
+36:{title:"Love & Purity",memoryVerse:"Song of Songs 8:6",fiveToThrive:["Boundary protects love?","Honor in relationships?","Repentance in sexuality?","Celebrate covenant?","Actionable Awe: Relationship act"],readings:[{book:"John",chapters:[2]},{book:"Song of Songs",chapters:[5,6,7,8]},{book:"Isaiah",chapters:[1,2,3,4,5]},{book:"2 Corinthians",chapters:[11]},{book:"Romans",chapters:[12]},{book:"Psalms",chapters:[105,106]}]},
+37:{title:"Call & Holiness",memoryVerse:"Isaiah 6:8",fiveToThrive:["God sending where?","Purity supports call?","Mentor/serve who?","Name fear?","Actionable Awe: Here am I—go"],readings:[{book:"John",chapters:[3]},{book:"Isaiah",chapters:[6,7,8,9,10,11,12]},{book:"Romans",chapters:[9,10,11]},{book:"1 Peter",chapters:[1]},{book:"Psalms",chapters:[107,108,109]}]},
+38:{title:"Nations",memoryVerse:"Acts 17:26-27",fiveToThrive:["Cross cultural line?","Learn/listen first?","Support newcomers?","Repent bias?","Actionable Awe: Cross-cultural kindness"],readings:[{book:"John",chapters:[4]},{book:"Isaiah",chapters:[13,14,15,16,17,18,19,20,21,22,23]},{book:"Acts",chapters:[17]},{book:"Galatians",chapters:[2,3]},{book:"Psalms",chapters:[110,111,112]}]},
+39:{title:"Trust",memoryVerse:"Isaiah 26:3",fiveToThrive:["Anxiety rules phones?","Curate inputs?","Replace doom-scrolling?","Calming presence needed?","Actionable Awe: Trust move"],readings:[{book:"John",chapters:[5]},{book:"Isaiah",chapters:[24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39]},{book:"Hebrews",chapters:[11]},{book:"Romans",chapters:[15]},{book:"Psalms",chapters:[113,114,115]}]},
+40:{title:"Servant",memoryVerse:"Isaiah 40:31",fiveToThrive:["Serve unseen?","Meet workplace need?","Guard humility?","Endure without resentment?","Actionable Awe: Hidden service"],readings:[{book:"John",chapters:[6]},{book:"Isaiah",chapters:[40,41,42,43,44,45,46,47,48]},{book:"Philippians",chapters:[2]},{book:"1 Peter",chapters:[2]},{book:"Psalms",chapters:[116,117,118]}]},
+41:{title:"New Creation",memoryVerse:"Isaiah 61:1",fiveToThrive:["Hope thin?","Plant new creation?","Invite to joy?","Resist injustice?","Actionable Awe: Plant foretaste"],readings:[{book:"John",chapters:[7]},{book:"Isaiah",chapters:[49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66]},{book:"Revelation",chapters:[21,22]},{book:"Romans",chapters:[8]},{book:"Psalms",chapters:[119]}]},
+42:{title:"Call & Courage",memoryVerse:"Jeremiah 1:9",fiveToThrive:["Avoiding message?","Speak truth tenderly?","Encouragement needed?","Endure misunderstanding?","Actionable Awe: Speak truth"],readings:[{book:"John",chapters:[8]},{book:"Jeremiah",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13]},{book:"2 Corinthians",chapters:[3,4,5]},{book:"Psalms",chapters:[119]}]},
+43:{title:"Covenant Heart",memoryVerse:"Jeremiah 29:11",fiveToThrive:["Habit forms heart?","Confession opens renewal?","Reconcile with?","Embody justice/mercy?","Actionable Awe: Cement heart practice"],readings:[{book:"John",chapters:[9]},{book:"Jeremiah",chapters:[14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]},{book:"Hebrews",chapters:[8,9,10]},{book:"Romans",chapters:[3]},{book:"Psalms",chapters:[119]}]},
+44:{title:"Grief & Presence",memoryVerse:"Lamentations 3:22-23",fiveToThrive:["Grief needs expression?","Sit with hurting?","Gentle words and help?","Receive care?","Actionable Awe: Comfort someone"],readings:[{book:"John",chapters:[10]},{book:"Jeremiah",chapters:[30,31,32,33,34,35,36,37,38,39]},{book:"Lamentations",chapters:[1,2,3,4,5]},{book:"1 Peter",chapters:[5]},{book:"Psalms",chapters:[119]}]},
+45:{title:"Hope & Future",memoryVerse:"Jeremiah 32:17",fiveToThrive:["Future fear grips?","Hope reshapes plan?","Generosity as faith?","Hopeful words needed?","Actionable Awe: Hope investment"],readings:[{book:"John",chapters:[11]},{book:"Jeremiah",chapters:[40,41,42,43,44,45,46,47,48,49,50,51,52]},{book:"Romans",chapters:[15]},{book:"Revelation",chapters:[21]},{book:"Psalms",chapters:[119]}]},
+46:{title:"Glory & Spirit",memoryVerse:"Ezekiel 11:19",fiveToThrive:["Feel dry bones?","Spirit-led habit revives?","Glory reorients choices?","Pray with someone?","Actionable Awe: Address dry bone"],readings:[{book:"John",chapters:[12]},{book:"Ezekiel",chapters:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"John",chapters:[3]},{book:"Romans",chapters:[8]},{book:"Psalms",chapters:[119]}]},
+47:{title:"New Heart & Shepherd",memoryVerse:"Ezekiel 18:31",fiveToThrive:["Hardness forming?","Practice softness?","Shepherd-like care?","Embrace discipline?","Actionable Awe: Forgive or pursue"],readings:[{book:"John",chapters:[13]},{book:"Ezekiel",chapters:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"John",chapters:[10]},{book:"Titus",chapters:[3]},{book:"2 Corinthians",chapters:[3]},{book:"Psalms",chapters:[119]}]},
+48:{title:"Nations & Justice",memoryVerse:"Ezekiel 33:11",fiveToThrive:["Justice on doorstep?","Mercy with sleeves up?","Stand with?","Sacrifice to make?","Actionable Awe: Justice-shaped mercy"],readings:[{book:"John",chapters:[14]},{book:"Ezekiel",chapters:[25,26,27,28,29,30,31,32,33]},{book:"Ephesians",chapters:[2]},{book:"Psalms",chapters:[120,121,122]}]},
+49:{title:"Temple Vision",memoryVerse:"Ezekiel 36:26",fiveToThrive:["Host God's presence?","Communal worship rhythm?","Honour church as temple?","Pursue purity?","Actionable Awe: Make space for presence"],readings:[{book:"John",chapters:[15]},{book:"Ezekiel",chapters:[34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]},{book:"1 Corinthians",chapters:[3]},{book:"Revelation",chapters:[21]},{book:"Psalms",chapters:[123,124,125]}]},
+50:{title:"Faith under Empire",memoryVerse:"Daniel 1:8",fiveToThrive:["Workplace/uni test?","Stay distinct not disdainful?","Stand with?","Daily rhythm anchors?","Actionable Awe: Public faith act"],readings:[{book:"John",chapters:[16]},{book:"Daniel",chapters:[1,2,3,4,5,6,7,8]},{book:"Hebrews",chapters:[11]},{book:"Psalms",chapters:[126,127,128]}]},
+51:{title:"Prayer & Future",memoryVerse:"Daniel 9:3",fiveToThrive:["Future needs intercession?","Pair prayer with planning?","Invite to pray?","Fast to focus?","Actionable Awe: Future-shaping prayer"],readings:[{book:"John",chapters:[17]},{book:"Daniel",chapters:[9,10,11,12]},{book:"Hosea",chapters:[1,2,3,4,5,6,7]},{book:"Matthew",chapters:[24]},{book:"Mark",chapters:[13]},{book:"Romans",chapters:[9,10,11]},{book:"Psalms",chapters:[129,130,131]}]},
+52:{title:"Love & Justice",memoryVerse:"Hosea 6:6",fiveToThrive:["Love requires truth?","Enact justice locally?","Covenant faithfulness?","Resist performative activism?","Actionable Awe: Pair justice with mercy"],readings:[{book:"John",chapters:[18]},{book:"Hosea",chapters:[8,9,10,11,12,13,14]},{book:"Joel",chapters:[1,2,3]},{book:"Amos",chapters:[1,2,3,4]},{book:"Romans",chapters:[9]},{book:"Ephesians",chapters:[5]},{book:"Psalms",chapters:[132,133,134]}]},
+53:{title:"Repentance & Mission",memoryVerse:"Amos 5:24",fiveToThrive:["Need to turn?","Go with good news?","Prejudice must die?","Costly compassion?","Actionable Awe: Turn + go"],readings:[{book:"John",chapters:[19]},{book:"Amos",chapters:[5,6,7,8,9]},{book:"Obadiah",chapters:[1]},{book:"Jonah",chapters:[1,2,3,4]},{book:"James",chapters:[2,5]},{book:"Matthew",chapters:[12]},{book:"Psalms",chapters:[135,136,137]}]},
+54:{title:"Humility & Courage",memoryVerse:"Micah 6:8",fiveToThrive:["Walk humbly?","Brave act needed?","Bless enemies?","Justice requires cost?","Actionable Awe: Walk brave humility"],readings:[{book:"John",chapters:[20]},{book:"Micah",chapters:[1,2,3,4,5,6,7]},{book:"Nahum",chapters:[1,2,3]},{book:"Matthew",chapters:[5,6,7]},{book:"Romans",chapters:[12]},{book:"Psalms",chapters:[138,139,140]}]},
+55:{title:"Faith & Renewal",memoryVerse:"Habakkuk 3:18",fiveToThrive:["Waiting in faith?","Rebuild step overdue?","Recruit others?","Finance/fuel renewal?","Actionable Awe: Take rebuild step"],readings:[{book:"John",chapters:[21]},{book:"Habakkuk",chapters:[1,2,3]},{book:"Zephaniah",chapters:[1,2,3]},{book:"Haggai",chapters:[1,2]},{book:"Zechariah",chapters:[1,2,3,4,5,6,7]},{book:"Hebrews",chapters:[10,11,12]},{book:"1 Peter",chapters:[2]},{book:"Psalms",chapters:[141,142,143]}]},
+56:{title:"Hope & Home",memoryVerse:"Revelation 21:5",fiveToThrive:["Eternity reshapes priority?","Bring Kingdom foretaste?","Encourage with hope?","Resist apathy?","Actionable Awe: Eternity-shaped priority shift"],readings:[{book:"John",chapters:[1]},{book:"Zechariah",chapters:[8,9,10,11,12,13,14]},{book:"Malachi",chapters:[1,2,3,4]},{book:"Revelation",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]},{book:"Psalms",chapters:[144,145,146,147,148,149,150]}]}
+};
 
-            <div id="weekReading" class="week-reading" style="display: none;">
-                <h3 id="weekTitle"></h3>
-                <div class="week-reading-list" id="weekReadingList"></div>
-                <button class="mark-read-btn" onclick="markWeekAsRead()" id="markWeekBtn">Mark This Week Complete</button>
-            </div>
+let readChapters={};
+let currentWeek=1;
+let darkMode=false;
 
-            <div class="overall-progress">
-                <div class="progress-header">
-                    <h3>Overall Bible Progress</h3>
-                    <div class="progress-percent" id="overallPercent">0%</div>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="overallProgressBar" style="width: 0%"></div>
-                </div>
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-number" id="chaptersRead">0</div>
-                        <div class="stat-label">Chapters Read</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" id="totalChapters">1189</div>
-                        <div class="stat-label">Total Chapters</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" id="booksCompleted">0</div>
-                        <div class="stat-label">Books Complete</div>
-                    </div>
-                </div>
-            </div>
+function init(){
+loadProgress();
+loadDarkMode();
+populateWeekSelector();
+updateWeek();
+renderBooks();
+updateOverallProgress();
+loadReminderSettings();
+}
 
-            <div class="books-container">
-                <div class="books-header">
-                    <h3>Books of the Bible</h3>
-                    <div class="view-toggle">
-                        <button class="active" onclick="setView('progress')" id="progressViewBtn">Progress</button>
-                        <button onclick="setView('chapters')" id="chaptersViewBtn">Chapters</button>
-                    </div>
-                </div>
-                <div id="booksContainer"></div>
-                <div class="legend">
-                    <div class="legend-item">
-                        <div class="legend-box current"></div>
-                        <span>This Week</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box read"></div>
-                        <span>Read</span>
-                    </div>
-                </div>
-            </div>
+function loadDarkMode(){
+const saved=localStorage.getItem('cccDarkMode');
+if(saved==='true'){
+darkMode=true;
+document.documentElement.setAttribute('data-theme','dark');
+document.getElementById('darkModeBtn').textContent='☀️';
+}}
 
-            <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
-        </div>
-    </div>
+function toggleDarkMode(){
+darkMode=!darkMode;
+if(darkMode){
+document.documentElement.setAttribute('data-theme','dark');
+document.getElementById('darkModeBtn').textContent='☀️';
+}else{
+document.documentElement.removeAttribute('data-theme');
+document.getElementById('darkModeBtn').textContent='🌙';
+}
+localStorage.setItem('cccDarkMode',darkMode.toString());
+}
 
-    <script>
-        // Bible data structure with all books and chapter counts
-        const bibleData = {
-            "Genesis": 50, "Exodus": 40, "Leviticus": 27, "Numbers": 36, "Deuteronomy": 34,
-            "Joshua": 24, "Judges": 21, "Ruth": 4, "1 Samuel": 31, "2 Samuel": 24,
-            "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36,
-            "Ezra": 10, "Nehemiah": 13, "Esther": 10, "Job": 42,
-            "Psalms": 150, "Proverbs": 31, "Ecclesiastes": 12, "Song of Songs": 8,
-            "Isaiah": 66, "Jeremiah": 52, "Lamentations": 5, "Ezekiel": 48, "Daniel": 12,
-            "Hosea": 14, "Joel": 3, "Amos": 9, "Obadiah": 1, "Jonah": 4,
-            "Micah": 7, "Nahum": 3, "Habakkuk": 3, "Zephaniah": 3, "Haggai": 2,
-            "Zechariah": 14, "Malachi": 4,
-            "Matthew": 28, "Mark": 16, "Luke": 24, "John": 21, "Acts": 28,
-            "Romans": 16, "1 Corinthians": 16, "2 Corinthians": 13, "Galatians": 6,
-            "Ephesians": 6, "Philippians": 4, "Colossians": 4, "1 Thessalonians": 5,
-            "2 Thessalonians": 3, "1 Timothy": 6, "2 Timothy": 4, "Titus": 3,
-            "Philemon": 1, "Hebrews": 13, "James": 5, "1 Peter": 5, "2 Peter": 3,
-            "1 John": 5, "2 John": 1, "3 John": 1, "Jude": 1, "Revelation": 22
-        };
+function setReminder(){
+if(!('Notification' in window)){
+alert('Your browser does not support notifications');
+return;
+}
+const frequency=document.getElementById('reminderFrequency').value;
+const time=document.getElementById('reminderTime').value;
+if(Notification.permission!=='granted'){
+Notification.requestPermission().then(permission=>{
+if(permission==='granted'){
+saveReminderSettings(frequency,time);
+}});
+}else{
+saveReminderSettings(frequency,time);
+}}
 
-        // CCC Reading Plan - Week by week readings
-        const cccReadingPlan = {
-            1: {
-                title: "Identity & Design (Adam/Eve)",
-                readings: [
-                    { book: "Matthew", chapters: [1, 2] },
-                    { book: "Genesis", chapters: [1, 2, 3, 4, 5] },
-                    { book: "Romans", chapters: [5] },
-                    { book: "1 Corinthians", chapters: [15] },
-                    { book: "Psalms", chapters: [1, 2, 3] }
-                ]
-            },
-            2: {
-                title: "New Beginnings (Noah)",
-                readings: [
-                    { book: "Matthew", chapters: [3, 4] },
-                    { book: "Genesis", chapters: [6, 7, 8, 9, 10, 11] },
-                    { book: "1 Peter", chapters: [3] },
-                    { book: "Acts", chapters: [2] },
-                    { book: "Psalms", chapters: [4, 5, 6] }
-                ]
-            },
-            3: {
-                title: "Trust & Promise (Abraham/Sarah)",
-                readings: [
-                    { book: "Matthew", chapters: [5, 6] },
-                    { book: "Genesis", chapters: [12, 13, 14, 15, 16, 17, 18] },
-                    { book: "Romans", chapters: [4] },
-                    { book: "Galatians", chapters: [3] },
-                    { book: "Psalms", chapters: [7, 8, 9] }
-                ]
-            },
-            4: {
-                title: "Family & Wrestling (Isaac/Jacob)",
-                readings: [
-                    { book: "Matthew", chapters: [7, 8] },
-                    { book: "Genesis", chapters: [24, 25, 26, 27, 28, 29, 30, 31, 32, 33] },
-                    { book: "Romans", chapters: [9] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "Psalms", chapters: [10, 11, 12] }
-                ]
-            },
-            5: {
-                title: "Providence & Resilience (Joseph)",
-                readings: [
-                    { book: "Matthew", chapters: [9, 10] },
-                    { book: "Genesis", chapters: [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50] },
-                    { book: "Acts", chapters: [7] },
-                    { book: "Romans", chapters: [8] },
-                    { book: "Psalms", chapters: [13, 14, 15] }
-                ]
-            },
-            6: {
-                title: "Deliverance (Moses/Exodus)",
-                readings: [
-                    { book: "Matthew", chapters: [11, 12] },
-                    { book: "Exodus", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "1 Corinthians", chapters: [5] },
-                    { book: "Psalms", chapters: [16, 17, 18] }
-                ]
-            },
-            7: {
-                title: "Holiness & Covenant",
-                readings: [
-                    { book: "Matthew", chapters: [13, 14] },
-                    { book: "Exodus", chapters: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] },
-                    { book: "Galatians", chapters: [3, 4] },
-                    { book: "Romans", chapters: [7] },
-                    { book: "Psalms", chapters: [19, 20, 21] }
-                ]
-            },
-            8: {
-                title: "Presence & Priesthood",
-                readings: [
-                    { book: "Matthew", chapters: [15, 16] },
-                    { book: "Exodus", chapters: [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40] },
-                    { book: "Leviticus", chapters: [1, 2, 3, 4, 5, 6, 7] },
-                    { book: "Hebrews", chapters: [7, 8, 9, 10] },
-                    { book: "Psalms", chapters: [22, 23, 24] }
-                ]
-            },
-            9: {
-                title: "Wilderness & Testing",
-                readings: [
-                    { book: "Matthew", chapters: [17, 18] },
-                    { book: "Leviticus", chapters: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
-                    { book: "Numbers", chapters: [1, 2, 3, 4, 5, 6] },
-                    { book: "1 Corinthians", chapters: [10] },
-                    { book: "Hebrews", chapters: [3, 4] },
-                    { book: "Psalms", chapters: [25, 26, 27] }
-                ]
-            },
-            10: {
-                title: "Guidance & Discernment",
-                readings: [
-                    { book: "Matthew", chapters: [19, 20] },
-                    { book: "Numbers", chapters: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                    { book: "Jude", chapters: [1] },
-                    { book: "James", chapters: [1] },
-                    { book: "Psalms", chapters: [28, 29, 30] }
-                ]
-            },
-            11: {
-                title: "Toward the Promised Land & Courage",
-                readings: [
-                    { book: "Matthew", chapters: [21, 22] },
-                    { book: "Numbers", chapters: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36] },
-                    { book: "2 Peter", chapters: [2] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "Psalms", chapters: [31, 32, 33] }
-                ]
-            },
-            12: {
-                title: "Remember & Renew (Deuteronomy)",
-                readings: [
-                    { book: "Matthew", chapters: [23, 24] },
-                    { book: "Deuteronomy", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17] },
-                    { book: "Hebrews", chapters: [8, 9, 10] },
-                    { book: "Psalms", chapters: [34, 35, 36] }
-                ]
-            },
-            13: {
-                title: "Trust over Control (Joshua)",
-                readings: [
-                    { book: "Matthew", chapters: [25, 26] },
-                    { book: "Deuteronomy", chapters: [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34] },
-                    { book: "Joshua", chapters: [1, 2, 3, 4, 5, 6] },
-                    { book: "Romans", chapters: [10] },
-                    { book: "James", chapters: [2] },
-                    { book: "Psalms", chapters: [37, 38, 39] }
-                ]
-            },
-            14: {
-                title: "Loyal Love (Judges & Ruth)",
-                readings: [
-                    { book: "Matthew", chapters: [27, 28] },
-                    { book: "Joshua", chapters: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] },
-                    { book: "Ruth", chapters: [1] },
-                    { book: "Hebrews", chapters: [4] },
-                    { book: "Acts", chapters: [13] },
-                    { book: "Psalms", chapters: [40, 41] }
-                ]
-            },
-            15: {
-                title: "Integrity in Chaos (Judges)",
-                readings: [
-                    { book: "Mark", chapters: [1, 2] },
-                    { book: "Judges", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                    { book: "Ruth", chapters: [2] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "James", chapters: [2] },
-                    { book: "Psalms", chapters: [42, 43, 44] }
-                ]
-            },
-            16: {
-                title: "Listening Leadership (Samuel/Saul)",
-                readings: [
-                    { book: "Mark", chapters: [3, 4] },
-                    { book: "1 Samuel", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
-                    { book: "Ruth", chapters: [3] },
-                    { book: "Acts", chapters: [13] },
-                    { book: "2 Corinthians", chapters: [1, 2] },
-                    { book: "Psalms", chapters: [45, 46] }
-                ]
-            },
-            17: {
-                title: "Calling (David's Rise)",
-                readings: [
-                    { book: "Mark", chapters: [5, 6] },
-                    { book: "1 Samuel", chapters: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31] },
-                    { book: "Romans", chapters: [1] },
-                    { book: "Psalms", chapters: [47, 48, 49] }
-                ]
-            },
-            18: {
-                title: "Patience, Mercy, Truth (David as Anointed Fugitive)",
-                readings: [
-                    { book: "Mark", chapters: [7, 8] },
-                    { book: "2 Samuel", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-                    { book: "Acts", chapters: [2] },
-                    { book: "Romans", chapters: [4] },
-                    { book: "Psalms", chapters: [50, 51, 52, 53] }
-                ]
-            },
-            19: {
-                title: "Trials & Humility (David as King and Criminal)",
-                readings: [
-                    { book: "Mark", chapters: [9, 10] },
-                    { book: "2 Samuel", chapters: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] },
-                    { book: "1 Kings", chapters: [1, 2] },
-                    { book: "1 Peter", chapters: [5] },
-                    { book: "Psalms", chapters: [54, 55, 56] }
-                ]
-            },
-            20: {
-                title: "Wisdom & Desire (Solomon)",
-                readings: [
-                    { book: "Mark", chapters: [11, 12] },
-                    { book: "1 Kings", chapters: [3, 4, 5, 6, 7, 8, 9, 10, 11] },
-                    { book: "James", chapters: [1, 2, 3] },
-                    { book: "Psalms", chapters: [57, 58, 59] }
-                ]
-            },
-            21: {
-                title: "Faithfulness (Divided Kingdom/Elijah)",
-                readings: [
-                    { book: "Mark", chapters: [13, 14] },
-                    { book: "1 Kings", chapters: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22] },
-                    { book: "2 Kings", chapters: [1, 2] },
-                    { book: "James", chapters: [5] },
-                    { book: "Luke", chapters: [4] },
-                    { book: "Psalms", chapters: [60, 61, 62] }
-                ]
-            },
-            22: {
-                title: "Hope under Decline (Elisha/Kings)",
-                readings: [
-                    { book: "Mark", chapters: [15, 16] },
-                    { book: "2 Kings", chapters: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] },
-                    { book: "Romans", chapters: [11] },
-                    { book: "2 Corinthians", chapters: [6, 7] },
-                    { book: "Psalms", chapters: [63, 64, 65] }
-                ]
-            },
-            23: {
-                title: "Temple & Worship (Chronicles)",
-                readings: [
-                    { book: "Luke", chapters: [1, 2] },
-                    { book: "1 Chronicles", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
-                    { book: "Hebrews", chapters: [8, 9] },
-                    { book: "Psalms", chapters: [66, 67, 68] }
-                ]
-            },
-            24: {
-                title: "King & Praise (Davidic Covenant)",
-                readings: [
-                    { book: "Luke", chapters: [3, 4] },
-                    { book: "1 Chronicles", chapters: [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29] },
-                    { book: "Acts", chapters: [15] },
-                    { book: "Romans", chapters: [15] },
-                    { book: "Psalms", chapters: [69, 70, 71] }
-                ]
-            },
-            25: {
-                title: "Order & Peace (Solomon)",
-                readings: [
-                    { book: "Luke", chapters: [5, 6] },
-                    { book: "2 Chronicles", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-                    { book: "James", chapters: [3] },
-                    { book: "Psalms", chapters: [72, 73, 74] }
-                ]
-            },
-            26: {
-                title: "Perseverance (Kings & Prophets)",
-                readings: [
-                    { book: "Luke", chapters: [7, 8] },
-                    { book: "2 Chronicles", chapters: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] },
-                    { book: "1 Peter", chapters: [1, 2, 3, 4, 5] },
-                    { book: "2 Peter", chapters: [1, 2, 3] },
-                    { book: "Psalms", chapters: [75, 76, 77] }
-                ]
-            },
-            27: {
-                title: "Reform (Hezekiah/Josiah)",
-                readings: [
-                    { book: "Luke", chapters: [9, 10] },
-                    { book: "2 Chronicles", chapters: [29, 30, 31, 32, 33, 34, 35, 36] },
-                    { book: "Romans", chapters: [12] },
-                    { book: "Hebrews", chapters: [12] },
-                    { book: "Psalms", chapters: [78, 79, 80] }
-                ]
-            },
-            28: {
-                title: "Word & Community (Ezra)",
-                readings: [
-                    { book: "Luke", chapters: [11, 12] },
-                    { book: "Ezra", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                    { book: "Romans", chapters: [9, 10, 11] },
-                    { book: "Psalms", chapters: [81, 82, 83] }
-                ]
-            },
-            29: {
-                title: "Building & Boundaries (Nehemiah)",
-                readings: [
-                    { book: "Luke", chapters: [13, 14] },
-                    { book: "Nehemiah", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
-                    { book: "1 Corinthians", chapters: [3] },
-                    { book: "Titus", chapters: [1, 2, 3] },
-                    { book: "Psalms", chapters: [84, 85, 86] }
-                ]
-            },
-            30: {
-                title: "Providence & Courage (Esther)",
-                readings: [
-                    { book: "Luke", chapters: [15, 16] },
-                    { book: "Esther", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                    { book: "Romans", chapters: [8] },
-                    { book: "1 Peter", chapters: [2] },
-                    { book: "Psalms", chapters: [87, 88, 89] }
-                ]
-            },
-            31: {
-                title: "Honest Faith (Job 1-21)",
-                readings: [
-                    { book: "Luke", chapters: [17, 18] },
-                    { book: "Job", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                    { book: "James", chapters: [1] },
-                    { book: "1 Peter", chapters: [1, 2] },
-                    { book: "Psalms", chapters: [90, 91, 92] }
-                ]
-            },
-            32: {
-                title: "Patience & Hope (Job 22-42)",
-                readings: [
-                    { book: "Luke", chapters: [19, 20] },
-                    { book: "Job", chapters: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42] },
-                    { book: "Romans", chapters: [5] },
-                    { book: "James", chapters: [5] },
-                    { book: "Psalms", chapters: [93, 94, 95] }
-                ]
-            },
-            33: {
-                title: "Everyday Wisdom (Proverbs 1-15)",
-                readings: [
-                    { book: "Luke", chapters: [21, 22] },
-                    { book: "Proverbs", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
-                    { book: "James", chapters: [1, 2, 3, 4, 5] },
-                    { book: "Psalms", chapters: [96, 97, 98] }
-                ]
-            },
-            34: {
-                title: "Meaning (Proverbs 16-31; Ecclesiastes 1-6)",
-                readings: [
-                    { book: "Luke", chapters: [23, 24] },
-                    { book: "Proverbs", chapters: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31] },
-                    { book: "Ecclesiastes", chapters: [1, 2, 3, 4, 5, 6] },
-                    { book: "Colossians", chapters: [3] },
-                    { book: "Ephesians", chapters: [4, 5, 6] },
-                    { book: "Psalms", chapters: [99, 100, 101] }
-                ]
-            },
-            35: {
-                title: "Desire & Meaning (Ecclesiastes; Song 1-4)",
-                readings: [
-                    { book: "John", chapters: [1] },
-                    { book: "Ecclesiastes", chapters: [7, 8, 9, 10, 11, 12] },
-                    { book: "Song of Songs", chapters: [1, 2, 3, 4] },
-                    { book: "Ephesians", chapters: [5] },
-                    { book: "Revelation", chapters: [21] },
-                    { book: "Psalms", chapters: [102, 103, 104] }
-                ]
-            },
-            36: {
-                title: "Love & Purity (Song 5-8; Isaiah 1-5)",
-                readings: [
-                    { book: "John", chapters: [2] },
-                    { book: "Song of Songs", chapters: [5, 6, 7, 8] },
-                    { book: "Isaiah", chapters: [1, 2, 3, 4, 5] },
-                    { book: "2 Corinthians", chapters: [11] },
-                    { book: "Romans", chapters: [12] },
-                    { book: "Psalms", chapters: [105, 106] }
-                ]
-            },
-            37: {
-                title: "Call & Holiness (Isaiah 6-12)",
-                readings: [
-                    { book: "John", chapters: [3] },
-                    { book: "Isaiah", chapters: [6, 7, 8, 9, 10, 11, 12] },
-                    { book: "Romans", chapters: [9, 10, 11] },
-                    { book: "1 Peter", chapters: [1] },
-                    { book: "Psalms", chapters: [107, 108, 109] }
-                ]
-            },
-            38: {
-                title: "Nations (Isaiah 13-23)",
-                readings: [
-                    { book: "John", chapters: [4] },
-                    { book: "Isaiah", chapters: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23] },
-                    { book: "Acts", chapters: [17] },
-                    { book: "Galatians", chapters: [2, 3] },
-                    { book: "Psalms", chapters: [110, 111, 112] }
-                ]
-            },
-            39: {
-                title: "Trust (Isaiah 24-39)",
-                readings: [
-                    { book: "John", chapters: [5] },
-                    { book: "Isaiah", chapters: [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "Romans", chapters: [15] },
-                    { book: "Psalms", chapters: [113, 114, 115] }
-                ]
-            },
-            40: {
-                title: "Servant (Isaiah 40-48)",
-                readings: [
-                    { book: "John", chapters: [6] },
-                    { book: "Isaiah", chapters: [40, 41, 42, 43, 44, 45, 46, 47, 48] },
-                    { book: "Philippians", chapters: [2] },
-                    { book: "1 Peter", chapters: [2] },
-                    { book: "Psalms", chapters: [116, 117, 118] }
-                ]
-            },
-            41: {
-                title: "New Creation (Isaiah 49-66)",
-                readings: [
-                    { book: "John", chapters: [7] },
-                    { book: "Isaiah", chapters: [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66] },
-                    { book: "Revelation", chapters: [21, 22] },
-                    { book: "Romans", chapters: [8] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            42: {
-                title: "Call & Courage under Conquest (Jeremiah 1-13)",
-                readings: [
-                    { book: "John", chapters: [8] },
-                    { book: "Jeremiah", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] },
-                    { book: "2 Corinthians", chapters: [3, 4, 5] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            43: {
-                title: "Covenant Heart (Jeremiah 14-29)",
-                readings: [
-                    { book: "John", chapters: [9] },
-                    { book: "Jeremiah", chapters: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29] },
-                    { book: "Hebrews", chapters: [8, 9, 10] },
-                    { book: "Romans", chapters: [3] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            44: {
-                title: "Grief & Presence (Jeremiah 30-39; Lamentations)",
-                readings: [
-                    { book: "John", chapters: [10] },
-                    { book: "Jeremiah", chapters: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39] },
-                    { book: "Lamentations", chapters: [1, 2, 3, 4, 5] },
-                    { book: "1 Peter", chapters: [5] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            45: {
-                title: "Hope & Future (Jeremiah 40-52)",
-                readings: [
-                    { book: "John", chapters: [11] },
-                    { book: "Jeremiah", chapters: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52] },
-                    { book: "Romans", chapters: [15] },
-                    { book: "Revelation", chapters: [21] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            46: {
-                title: "Glory & Spirit (Ezekiel 1-12)",
-                readings: [
-                    { book: "John", chapters: [12] },
-                    { book: "Ezekiel", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-                    { book: "John", chapters: [3] },
-                    { book: "Romans", chapters: [8] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            47: {
-                title: "New Heart & Shepherd (Ezekiel 13-24)",
-                readings: [
-                    { book: "John", chapters: [13] },
-                    { book: "Ezekiel", chapters: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] },
-                    { book: "John", chapters: [10] },
-                    { book: "Titus", chapters: [3] },
-                    { book: "2 Corinthians", chapters: [3] },
-                    { book: "Psalms", chapters: [119] }
-                ]
-            },
-            48: {
-                title: "Nations & Justice (Ezekiel 25-33)",
-                readings: [
-                    { book: "John", chapters: [14] },
-                    { book: "Ezekiel", chapters: [25, 26, 27, 28, 29, 30, 31, 32, 33] },
-                    { book: "Ephesians", chapters: [2] },
-                    { book: "Psalms", chapters: [120, 121, 122] }
-                ]
-            },
-            49: {
-                title: "Temple Vision (Ezekiel 34-48)",
-                readings: [
-                    { book: "John", chapters: [15] },
-                    { book: "Ezekiel", chapters: [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] },
-                    { book: "1 Corinthians", chapters: [3] },
-                    { book: "Revelation", chapters: [21] },
-                    { book: "Psalms", chapters: [123, 124, 125] }
-                ]
-            },
-            50: {
-                title: "Faith under Empire (Daniel 1-8)",
-                readings: [
-                    { book: "John", chapters: [16] },
-                    { book: "Daniel", chapters: [1, 2, 3, 4, 5, 6, 7, 8] },
-                    { book: "Hebrews", chapters: [11] },
-                    { book: "Psalms", chapters: [126, 127, 128] }
-                ]
-            },
-            51: {
-                title: "Prayer & Future (Daniel 9-12; Hosea 1-7)",
-                readings: [
-                    { book: "John", chapters: [17] },
-                    { book: "Daniel", chapters: [9, 10, 11, 12] },
-                    { book: "Hosea", chapters: [1, 2, 3, 4, 5, 6, 7] },
-                    { book: "Matthew", chapters: [24] },
-                    { book: "Mark", chapters: [13] },
-                    { book: "Romans", chapters: [9, 10, 11] },
-                    { book: "Psalms", chapters: [129, 130, 131] }
-                ]
-            },
-            52: {
-                title: "Love & Justice (Hosea 8-14; Joel; Amos 1-4)",
-                readings: [
-                    { book: "John", chapters: [18] },
-                    { book: "Hosea", chapters: [8, 9, 10, 11, 12, 13, 14] },
-                    { book: "Joel", chapters: [1, 2, 3] },
-                    { book: "Amos", chapters: [1, 2, 3, 4] },
-                    { book: "Romans", chapters: [9] },
-                    { book: "Ephesians", chapters: [5] },
-                    { book: "Psalms", chapters: [132, 133, 134] }
-                ]
-            },
-            53: {
-                title: "Repentance & Mission (Amos 5-9; Obadiah; Jonah)",
-                readings: [
-                    { book: "John", chapters: [19] },
-                    { book: "Amos", chapters: [5, 6, 7, 8, 9] },
-                    { book: "Obadiah", chapters: [1] },
-                    { book: "Jonah", chapters: [1, 2, 3, 4] },
-                    { book: "James", chapters: [2, 5] },
-                    { book: "Matthew", chapters: [12] },
-                    { book: "Psalms", chapters: [135, 136, 137] }
-                ]
-            },
-            54: {
-                title: "Humility & Courage (Micah; Nahum)",
-                readings: [
-                    { book: "John", chapters: [20] },
-                    { book: "Micah", chapters: [1, 2, 3, 4, 5, 6, 7] },
-                    { book: "Nahum", chapters: [1, 2, 3] },
-                    { book: "Matthew", chapters: [5, 6, 7] },
-                    { book: "Romans", chapters: [12] },
-                    { book: "Psalms", chapters: [138, 139, 140] }
-                ]
-            },
-            55: {
-                title: "Faith & Renewal (Habakkuk; Zephaniah; Haggai; Zechariah 1-7)",
-                readings: [
-                    { book: "John", chapters: [21] },
-                    { book: "Habakkuk", chapters: [1, 2, 3] },
-                    { book: "Zephaniah", chapters: [1, 2, 3] },
-                    { book: "Haggai", chapters: [1, 2] },
-                    { book: "Zechariah", chapters: [1, 2, 3, 4, 5, 6, 7] },
-                    { book: "Hebrews", chapters: [10, 11, 12] },
-                    { book: "1 Peter", chapters: [2] },
-                    { book: "Psalms", chapters: [141, 142, 143] }
-                ]
-            },
-            56: {
-                title: "Hope & Home (Zechariah 8-14; Malachi; Revelation)",
-                readings: [
-                    { book: "John", chapters: [1] },
-                    { book: "Zechariah", chapters: [8, 9, 10, 11, 12, 13, 14] },
-                    { book: "Malachi", chapters: [1, 2, 3, 4] },
-                    { book: "Revelation", chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22] },
-                    { book: "Psalms", chapters: [144, 145, 146, 147, 148, 149, 150] }
-                ]
-            }
-        };
+function saveReminderSettings(frequency,time){
+localStorage.setItem('cccReminderFrequency',frequency);
+localStorage.setItem('cccReminderTime',time);
+document.getElementById('reminderStatus').textContent=`${frequency.charAt(0).toUpperCase()+frequency.slice(1)} reminder set for ${time}`;
+}
 
-        let readChapters = {};
-        let currentWeek = 1;
-        let currentView = 'progress';
+function loadReminderSettings(){
+const frequency=localStorage.getItem('cccReminderFrequency');
+const time=localStorage.getItem('cccReminderTime');
+if(frequency&&time){
+document.getElementById('reminderFrequency').value=frequency;
+document.getElementById('reminderTime').value=time;
+document.getElementById('reminderStatus').textContent=`${frequency.charAt(0).toUpperCase()+frequency.slice(1)} reminder set for ${time}`;
+}}
 
-        // Initialize the app
-        function init() {
-            loadProgress();
-            populateWeekSelector();
-            updateWeek();
-            renderBooks();
-            updateOverallProgress();
-        }
+function loadProgress(){
+const saved=localStorage.getItem('cccBibleProgress');
+if(saved)readChapters=JSON.parse(saved);
+const savedWeek=localStorage.getItem('cccCurrentWeek');
+if(savedWeek)currentWeek=parseInt(savedWeek);
+}
 
-        // Load progress from localStorage
-        function loadProgress() {
-            const saved = localStorage.getItem('cccBibleProgress');
-            if (saved) {
-                readChapters = JSON.parse(saved);
-            }
-            const savedWeek = localStorage.getItem('cccCurrentWeek');
-            if (savedWeek) {
-                currentWeek = parseInt(savedWeek);
-            }
-        }
+function saveProgress(){
+localStorage.setItem('cccBibleProgress',JSON.stringify(readChapters));
+localStorage.setItem('cccCurrentWeek',currentWeek.toString());
+}
 
-        // Save progress to localStorage
-        function saveProgress() {
-            localStorage.setItem('cccBibleProgress', JSON.stringify(readChapters));
-            localStorage.setItem('cccCurrentWeek', currentWeek.toString());
-        }
+function populateWeekSelector(){
+const select=document.getElementById('weekSelect');
+for(let i=1;i<=56;i++){
+const option=document.createElement('option');
+option.value=i;
+option.textContent=`Week ${i}: ${cccReadingPlan[i].title}`;
+if(i===currentWeek)option.selected=true;
+select.appendChild(option);
+}}
 
-        // Populate week selector
-        function populateWeekSelector() {
-            const select = document.getElementById('weekSelect');
-            for (let i = 1; i <= 56; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = `Week ${i}: ${cccReadingPlan[i].title}`;
-                if (i === currentWeek) {
-                    option.selected = true;
-                }
-                select.appendChild(option);
-            }
-        }
+function updateWeek(){
+const select=document.getElementById('weekSelect');
+currentWeek=parseInt(select.value);
+saveProgress();
+const weekData=cccReadingPlan[currentWeek];
+document.getElementById('memoryVerseText').textContent=weekData.memoryVerse;
+document.getElementById('memoryVerse').style.display='block';
+const questionList=document.getElementById('questionList');
+questionList.innerHTML='';
+weekData.fiveToThrive.forEach((question,index)=>{
+const questionDiv=document.createElement('div');
+questionDiv.className='question-item';
+questionDiv.textContent=`${index+1}. ${question}`;
+questionList.appendChild(questionDiv);
+});
+document.getElementById('fiveToThrive').style.display='block';
+document.getElementById('weekTitle').textContent=`Week ${currentWeek}: ${weekData.title}`;
+const readingList=document.getElementById('weekReadingList');
+readingList.innerHTML='';
+weekData.readings.forEach(reading=>{
+const item=document.createElement('div');
+item.className='reading-item';
+const chapterText=reading.chapters.length===1?`${reading.book} ${reading.chapters[0]}`:`${reading.book} ${reading.chapters[0]}-${reading.chapters[reading.chapters.length-1]}`;
+item.textContent=chapterText;
+readingList.appendChild(item);
+});
+document.getElementById('weekReading').style.display='block';
+updateMarkWeekButton();
+renderBooks();
+}
 
-        // Update current week display
-        function updateWeek() {
-            const select = document.getElementById('weekSelect');
-            currentWeek = parseInt(select.value);
-            saveProgress();
-            
-            const weekData = cccReadingPlan[currentWeek];
-            document.getElementById('weekTitle').textContent = `Week ${currentWeek}: ${weekData.title}`;
-            
-            const readingList = document.getElementById('weekReadingList');
-            readingList.innerHTML = '';
-            
-            weekData.readings.forEach(reading => {
-                const item = document.createElement('div');
-                item.className = 'reading-item';
-                
-                const chapterText = reading.chapters.length === 1 
-                    ? `${reading.book} ${reading.chapters[0]}`
-                    : `${reading.book} ${reading.chapters[0]}-${reading.chapters[reading.chapters.length - 1]}`;
-                    
-                item.innerHTML = `<span>${chapterText}</span>`;
-                readingList.appendChild(item);
-            });
-            
-            document.getElementById('weekReading').style.display = 'block';
-            updateMarkWeekButton();
-            renderBooks();
-        }
+function isWeekComplete(){
+const weekData=cccReadingPlan[currentWeek];
+for(const reading of weekData.readings){
+for(const chapter of reading.chapters){
+if(!isChapterRead(reading.book,chapter))return false;
+}}
+return true;
+}
 
-        // Check if all chapters in current week are read
-        function isWeekComplete() {
-            const weekData = cccReadingPlan[currentWeek];
-            for (const reading of weekData.readings) {
-                for (const chapter of reading.chapters) {
-                    if (!isChapterRead(reading.book, chapter)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+function updateMarkWeekButton(){
+const btn=document.getElementById('markWeekBtn');
+if(isWeekComplete()){
+btn.textContent='✓ Week Complete - Click to Undo';
+btn.classList.add('done');
+}else{
+btn.textContent='Mark This Week Complete';
+btn.classList.remove('done');
+}}
 
-        // Update the mark week button
-        function updateMarkWeekButton() {
-            const btn = document.getElementById('markWeekBtn');
-            if (isWeekComplete()) {
-                btn.textContent = '✓ Week Complete - Click to Undo';
-                btn.classList.add('done');
-            } else {
-                btn.textContent = 'Mark This Week Complete';
-                btn.classList.remove('done');
-            }
-        }
+function markWeekAsRead(){
+const weekData=cccReadingPlan[currentWeek];
+const isComplete=isWeekComplete();
+weekData.readings.forEach(reading=>{
+reading.chapters.forEach(chapter=>{
+markChapterRead(reading.book,chapter,!isComplete);
+});});
+saveProgress();
+updateOverallProgress();
+updateMarkWeekButton();
+renderBooks();
+}
 
-        // Mark entire week as read or unread (toggle)
-        function markWeekAsRead() {
-            const weekData = cccReadingPlan[currentWeek];
-            const isComplete = isWeekComplete();
-            
-            // Toggle: if complete, unmark; if incomplete, mark
-            weekData.readings.forEach(reading => {
-                reading.chapters.forEach(chapter => {
-                    markChapterRead(reading.book, chapter, !isComplete);
-                });
-            });
-            saveProgress();
-            updateOverallProgress();
-            updateMarkWeekButton();
-            renderBooks();
-        }
+function isChapterRead(book,chapter){
+return readChapters[book]&&readChapters[book].includes(chapter);
+}
 
-        // Check if a chapter is read
-        function isChapterRead(book, chapter) {
-            return readChapters[book] && readChapters[book].includes(chapter);
-        }
+function isChapterInCurrentWeek(book,chapter){
+const weekData=cccReadingPlan[currentWeek];
+for(const reading of weekData.readings){
+if(reading.book===book&&reading.chapters.includes(chapter))return true;
+}
+return false;
+}
 
-        // Check if chapter is in current week's reading
-        function isChapterInCurrentWeek(book, chapter) {
-            const weekData = cccReadingPlan[currentWeek];
-            for (const reading of weekData.readings) {
-                if (reading.book === book && reading.chapters.includes(chapter)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+function markChapterRead(book,chapter,isRead){
+if(!readChapters[book])readChapters[book]=[];
+if(isRead&&!readChapters[book].includes(chapter)){
+readChapters[book].push(chapter);
+}else if(!isRead){
+readChapters[book]=readChapters[book].filter(ch=>ch!==chapter);
+}
+saveProgress();
+updateOverallProgress();
+updateMarkWeekButton();
+updateBookProgress(book);
+}
 
-        // Mark chapter as read/unread
-        function markChapterRead(book, chapter, isRead) {
-            if (!readChapters[book]) {
-                readChapters[book] = [];
-            }
-            
-            if (isRead && !readChapters[book].includes(chapter)) {
-                readChapters[book].push(chapter);
-            } else if (!isRead) {
-                readChapters[book] = readChapters[book].filter(ch => ch !== chapter);
-            }
-            
-            saveProgress();
-            updateOverallProgress();
-            updateMarkWeekButton();
-            renderBooks();
-        }
+function toggleChapter(book,chapter,chapterElement){
+const isRead=isChapterRead(book,chapter);
+markChapterRead(book,chapter,!isRead);
+if(chapterElement){
+if(!isRead){
+chapterElement.classList.add('read');
+}else{
+chapterElement.classList.remove('read');
+}
+}
+}
 
-        // Toggle chapter read status
-        function toggleChapter(book, chapter) {
-            const isRead = isChapterRead(book, chapter);
-            markChapterRead(book, chapter, !isRead);
-        }
+function getBookProgress(book){
+const totalChapters=bibleData[book];
+const readCount=readChapters[book]?readChapters[book].length:0;
+return{read:readCount,total:totalChapters,percent:(readCount/totalChapters*100)};
+}
 
-        // Calculate book progress
-        function getBookProgress(book) {
-            const totalChapters = bibleData[book];
-            const readCount = readChapters[book] ? readChapters[book].length : 0;
-            return { read: readCount, total: totalChapters, percent: (readCount / totalChapters * 100) };
-        }
+function updateBookProgress(book){
+const progress=getBookProgress(book);
+const bookHeader=document.querySelector(`[onclick="toggleBook('${book}')"]`);
+if(bookHeader){
+const progressSpan=bookHeader.querySelector('span:last-child');
+if(progressSpan)progressSpan.textContent=`${progress.read}/${progress.total}`;
+}
+const progressFill=bookHeader?.nextElementSibling?.querySelector('.book-progress-fill');
+if(progressFill)progressFill.style.width=`${progress.percent}%`;
+}
 
-        // Update overall progress display
-        function updateOverallProgress() {
-            const totalChapters = Object.values(bibleData).reduce((a, b) => a + b, 0);
-            const readCount = Object.values(readChapters).reduce((sum, chapters) => sum + chapters.length, 0);
-            const percent = (readCount / totalChapters * 100).toFixed(1);
-            
-            document.getElementById('overallPercent').textContent = `${percent}%`;
-            document.getElementById('overallProgressBar').style.width = `${percent}%`;
-            document.getElementById('chaptersRead').textContent = readCount;
-            document.getElementById('totalChapters').textContent = totalChapters;
-            
-            const booksComplete = Object.keys(bibleData).filter(book => {
-                const progress = getBookProgress(book);
-                return progress.read === progress.total;
-            }).length;
-            document.getElementById('booksCompleted').textContent = booksComplete;
-        }
+function updateOverallProgress(){
+const totalChapters=Object.values(bibleData).reduce((a,b)=>a+b,0);
+const readCount=Object.values(readChapters).reduce((sum,chapters)=>sum+chapters.length,0);
+const percent=(readCount/totalChapters*100).toFixed(1);
+document.getElementById('overallPercent').textContent=`${percent}%`;
+document.getElementById('overallProgressBar').style.width=`${percent}%`;
+document.getElementById('chaptersRead').textContent=readCount;
+const booksComplete=Object.keys(bibleData).filter(book=>{
+const progress=getBookProgress(book);
+return progress.read===progress.total;
+}).length;
+document.getElementById('booksCompleted').textContent=booksComplete;
+}
 
-        // Set view mode
-        function setView(view) {
-            currentView = view;
-            document.getElementById('progressViewBtn').classList.toggle('active', view === 'progress');
-            document.getElementById('chaptersViewBtn').classList.toggle('active', view === 'chapters');
-            renderBooks();
-        }
+function renderBooks(){
+const container=document.getElementById('booksContainer');
+container.innerHTML='';
+Object.keys(bibleData).forEach(book=>{
+const bookItem=document.createElement('div');
+bookItem.className='book-item';
+const progress=getBookProgress(book);
+bookItem.innerHTML=`
+<div class="book-header" onclick="toggleBook('${book}')">
+<span style="font-weight:600">${book}</span>
+<span>${progress.read}/${progress.total}</span>
+</div>
+<div class="book-progress-bar">
+<div class="book-progress-fill" style="width:${progress.percent}%"></div>
+</div>
+<div class="chapters-view" id="chapters-${book}">
+<div class="chapters-grid" id="grid-${book}"></div>
+</div>
+`;
+container.appendChild(bookItem);
+});
+}
 
-        // Render all books
-        function renderBooks() {
-            const container = document.getElementById('booksContainer');
-            container.innerHTML = '';
-            
-            Object.keys(bibleData).forEach(book => {
-                const bookItem = document.createElement('div');
-                bookItem.className = 'book-item';
-                
-                const progress = getBookProgress(book);
-                
-                bookItem.innerHTML = `
-                    <div class="book-header" onclick="toggleBook('${book}')">
-                        <span class="book-name">${book}<span class="expandable-icon" id="icon-${book}">▼</span></span>
-                        <span class="book-progress">${progress.read}/${progress.total}</span>
-                    </div>
-                    <div class="book-progress-bar">
-                        <div class="book-progress-fill" style="width: ${progress.percent}%"></div>
-                    </div>
-                    <div class="chapters-view" id="chapters-${book}">
-                        <div class="chapters-grid" id="grid-${book}"></div>
-                    </div>
-                `;
-                
-                container.appendChild(bookItem);
-                
-                // Render chapters if in chapters view
-                if (currentView === 'chapters') {
-                    renderChapters(book);
-                }
-            });
-        }
+function toggleBook(book){
+const chaptersView=document.getElementById(`chapters-${book}`);
+if(chaptersView.classList.contains('open')){
+chaptersView.classList.remove('open');
+}else{
+chaptersView.classList.add('open');
+renderChapters(book);
+}}
 
-        // Toggle book expanded/collapsed
-        function toggleBook(book) {
-            const chaptersView = document.getElementById(`chapters-${book}`);
-            const icon = document.getElementById(`icon-${book}`);
-            
-            if (chaptersView.classList.contains('open')) {
-                chaptersView.classList.remove('open');
-                icon.classList.remove('open');
-            } else {
-                chaptersView.classList.add('open');
-                icon.classList.add('open');
-                renderChapters(book);
-            }
-        }
+function renderChapters(book){
+const grid=document.getElementById(`grid-${book}`);
+if(!grid)return;
+grid.innerHTML='';
+const totalChapters=bibleData[book];
+for(let i=1;i<=totalChapters;i++){
+const chapter=document.createElement('div');
+chapter.className='chapter-box';
+chapter.textContent=i;
+const inCurrentWeek=isChapterInCurrentWeek(book,i);
+const isRead=isChapterRead(book,i);
+if(isRead)chapter.classList.add('read');
+if(inCurrentWeek){
+chapter.classList.add('current-week');
+}else{
+chapter.classList.add('not-current-week');
+}
+chapter.onclick=()=>toggleChapter(book,i,chapter);
+grid.appendChild(chapter);
+}}
 
-        // Render chapters for a book
-        function renderChapters(book) {
-            const grid = document.getElementById(`grid-${book}`);
-            if (!grid) return;
-            
-            grid.innerHTML = '';
-            const totalChapters = bibleData[book];
-            
-            for (let i = 1; i <= totalChapters; i++) {
-                const chapter = document.createElement('div');
-                chapter.className = 'chapter-box';
-                chapter.textContent = i;
-                
-                if (isChapterRead(book, i)) {
-                    chapter.classList.add('read');
-                }
-                
-                if (isChapterInCurrentWeek(book, i)) {
-                    chapter.classList.add('current-week');
-                }
-                
-                chapter.onclick = () => toggleChapter(book, i);
-                grid.appendChild(chapter);
-            }
-        }
+function resetProgress(){
+if(confirm('Are you sure you want to reset ALL progress? This cannot be undone.')){
+readChapters={};
+currentWeek=1;
+saveProgress();
+document.getElementById('weekSelect').value=1;
+updateWeek();
+updateOverallProgress();
+renderBooks();
+}}
 
-        // Reset all progress
-        function resetProgress() {
-            if (confirm('Are you sure you want to reset ALL progress? This cannot be undone.')) {
-                readChapters = {};
-                currentWeek = 1;
-                saveProgress();
-                document.getElementById('weekSelect').value = 1;
-                updateWeek();
-                updateOverallProgress();
-                renderBooks();
-            }
-        }
-
-        // Initialize on page load
-        window.onload = init;
-    </script>
+window.onload=init;
+</script>
 </body>
 </html>
