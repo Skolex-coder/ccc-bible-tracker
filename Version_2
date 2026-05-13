@@ -1,0 +1,1260 @@
+<!--
+  CCC Bible Tracker V2.0
+  Character-Charged Christianity — 4-Phase, 65-Week Bible Reading Plan
+
+  Credit to Adrian Park for designing and running the CCC course,
+  and to Rebekah Park for design ideas and feedback.
+
+  Written for Nathaniel Jutsum — rebuilt May 2026.
+  V1.5 written December 2025. V2.0 rebuilt May 2026.
+
+  "Lord, may this app help me to train my soul and aid me in reading your word every week.
+  I pray that in the things I learn and the relationships I make, I will learn to honour
+  your word and honour your will for me and my life."
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>CCC Bible Tracker V2</title>
+<style>
+:root{
+  --bg-gradient-1:#667eea;--bg-gradient-2:#764ba2;
+  --bg-primary:#f9fafb;--bg-secondary:#fff;--bg-tertiary:#f3f4f6;
+  --text-primary:#1f2937;--text-secondary:#6b7280;--text-tertiary:#9ca3af;
+  --border-color:#e5e7eb;--accent-color:#2563eb;--accent-hover:#1e40af;
+  --shadow:rgba(0,0,0,.1);--shadow-heavy:rgba(0,0,0,.3);
+  --phase1:#2563eb;--phase2:#059669;--phase3:#d97706;--phase4:#7c3aed;
+  --sabbath-bg:#f0fdf4;--sabbath-border:#bbf7d0;--sabbath-text:#166534;
+}
+[data-theme=dark]{
+  --bg-gradient-1:#1e293b;--bg-gradient-2:#0f172a;
+  --bg-primary:#1e293b;--bg-secondary:#334155;--bg-tertiary:#475569;
+  --text-primary:#f1f5f9;--text-secondary:#cbd5e1;--text-tertiary:#94a3b8;
+  --border-color:#475569;--accent-color:#3b82f6;--accent-hover:#2563eb;
+  --shadow:rgba(0,0,0,.3);--shadow-heavy:rgba(0,0,0,.5);
+  --sabbath-bg:#14532d;--sabbath-border:#166534;--sabbath-text:#86efac;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,var(--bg-gradient-1) 0%,var(--bg-gradient-2) 100%);min-height:100vh;padding:20px;color:var(--text-primary);transition:background .3s}
+.container{max-width:800px;margin:0 auto;background:var(--bg-primary);border-radius:20px;box-shadow:0 20px 60px var(--shadow-heavy);overflow:hidden}
+.header{background:linear-gradient(135deg,var(--accent-color) 0%,var(--accent-hover) 100%);color:#fff;padding:30px 20px;text-align:center;position:relative}
+.header h1{font-size:28px;margin-bottom:6px;font-weight:700}
+.header p{opacity:.9;font-size:14px}
+.header .subtitle{font-size:12px;opacity:.7;margin-top:4px}
+.dark-mode-toggle{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .3s}
+.dark-mode-toggle:hover{background:rgba(255,255,255,.3);transform:scale(1.1)}
+.content{padding:20px}
+
+/* Week selector */
+.week-selector{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.week-selector h2{font-size:18px;margin-bottom:12px;color:var(--text-primary)}
+select{width:100%;padding:12px;border:2px solid var(--border-color);border-radius:8px;font-size:15px;background:var(--bg-primary);color:var(--text-primary);cursor:pointer}
+
+/* Phase badge */
+.phase-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:14px;color:#fff}
+.phase-1{background:var(--phase1)}
+.phase-2{background:var(--phase2)}
+.phase-3{background:var(--phase3)}
+.phase-4{background:var(--phase4)}
+.phase-sabbath{background:#6b7280}
+
+/* Memory verse card */
+.memory-card{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 4px 12px rgba(245,158,11,.3);color:#78350f;cursor:pointer;transition:transform .2s}
+.memory-card:hover{transform:translateY(-2px)}
+[data-theme=dark] .memory-card{color:#451a03}
+.memory-card-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-bottom:6px;font-weight:600}
+.memory-card-ref{font-size:20px;font-weight:700}
+.memory-card-hint{font-size:12px;opacity:.6;margin-top:4px}
+.memory-card-text{font-size:15px;font-style:italic;line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid rgba(120,53,15,.2);display:none}
+.memory-card.revealed .memory-card-text{display:block}
+.memory-card.revealed .memory-card-hint{display:none}
+
+/* BibleProject links */
+.bp-section{background:var(--bg-secondary);border-radius:12px;padding:16px 20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.bp-section h3{font-size:14px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.bp-link{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-color);text-decoration:none;color:var(--accent-color);font-size:14px;transition:opacity .2s}
+.bp-link:last-child{border-bottom:none;padding-bottom:0}
+.bp-link:hover{opacity:.7}
+.bp-link::before{content:"▶";font-size:10px;opacity:.6}
+
+/* Week readings */
+.week-reading-section{background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:8px;margin-bottom:16px}
+[data-theme=dark] .week-reading-section{background:#422006}
+.week-reading-section h3{font-size:16px;font-weight:600;margin-bottom:12px;color:var(--text-primary)}
+.reading-item{background:#fff;padding:10px 14px;border-radius:6px;font-size:14px;margin-bottom:8px;cursor:pointer;transition:all .2s;border:2px solid transparent;color:#1f2937}
+.reading-item:hover{transform:translateY(-1px);box-shadow:0 4px 8px var(--shadow)}
+[data-theme=dark] .reading-item{background:var(--bg-tertiary);color:var(--text-primary)}
+.reading-item.completed{border:2px solid #10b981;background:#d1fae5;color:#065f46}
+[data-theme=dark] .reading-item.completed{background:#064e3b;color:#6ee7b7}
+.mark-week-btn{background:var(--accent-color);color:#fff;border:none;padding:11px 20px;border-radius:6px;font-weight:600;cursor:pointer;width:100%;margin-top:12px;font-size:15px;transition:background .2s}
+.mark-week-btn:hover{background:var(--accent-hover)}
+.mark-week-btn.done{background:#10b981}
+.mark-week-btn.done:hover{background:#059669}
+
+/* OBT Section */
+.obt-section{background:var(--bg-secondary);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.obt-section h3{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.obt-section p{font-size:13px;color:var(--text-secondary);margin-bottom:10px;font-style:italic}
+.obt-textarea{width:100%;min-height:90px;padding:10px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:14px;font-family:inherit;background:var(--bg-primary);color:var(--text-primary);resize:vertical;transition:border-color .2s;line-height:1.5}
+.obt-textarea:focus{outline:none;border-color:var(--accent-color)}
+.obt-saved-note{font-size:11px;color:var(--text-tertiary);margin-top:5px;text-align:right;transition:opacity .3s}
+
+/* Sabbath week */
+.sabbath-header{background:var(--sabbath-bg);border:2px solid var(--sabbath-border);border-radius:12px;padding:20px;margin-bottom:16px;text-align:center}
+.sabbath-header h2{font-size:22px;color:var(--sabbath-text);margin-bottom:6px}
+.sabbath-header p{font-size:14px;color:var(--sabbath-text);opacity:.8;line-height:1.5}
+.sabbath-header.jubilee{background:linear-gradient(135deg,#fef3c7,#f0fdf4);border-color:#f59e0b}
+
+/* Catch-up section */
+.catchup-section{background:var(--bg-secondary);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.catchup-section h3{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px}
+.catchup-week-block{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border-color)}
+.catchup-week-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.catchup-week-title{font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+.catchup-item{display:inline-block;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:4px;padding:3px 8px;font-size:12px;margin:2px;color:var(--text-primary)}
+.catchup-complete{color:#10b981;font-size:13px;font-weight:600}
+.catchup-all-done{text-align:center;padding:20px;color:#10b981;font-size:16px;font-weight:600}
+
+/* Block memory verse cards (Sabbath review) */
+.block-memory-section{background:var(--bg-secondary);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.block-memory-section h3{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px}
+.block-memory-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.block-memory-grid{grid-template-columns:1fr}}
+.block-memory-card{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:8px;padding:12px;cursor:pointer;transition:transform .2s;color:#78350f}
+[data-theme=dark] .block-memory-card{color:#451a03}
+.block-memory-card:hover{transform:translateY(-2px)}
+.block-memory-card-week{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;opacity:.6;margin-bottom:3px}
+.block-memory-card-ref{font-size:14px;font-weight:700}
+.block-memory-card-title{font-size:11px;opacity:.7;margin-bottom:5px}
+.block-memory-card-text{font-size:12px;font-style:italic;line-height:1.5;margin-top:6px;padding-top:6px;border-top:1px solid rgba(120,53,15,.2);display:none}
+.block-memory-card.revealed .block-memory-card-text{display:block}
+
+/* Block OBT recap */
+.block-obt-section{background:var(--bg-secondary);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.block-obt-section h3{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px}
+.block-obt-entry{padding:10px 0;border-bottom:1px solid var(--border-color)}
+.block-obt-entry:last-child{border-bottom:none}
+.block-obt-week{font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:4px}
+.block-obt-text{font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5}
+.block-obt-empty{font-size:13px;color:var(--text-tertiary);font-style:italic}
+
+/* Overall progress */
+.overall-progress{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.progress-header{display:flex;justify-content:space-between;margin-bottom:12px;align-items:center}
+.progress-title{font-size:16px;font-weight:600;color:var(--text-primary)}
+.progress-percent{font-size:22px;font-weight:700;color:var(--accent-color)}
+.progress-bar-container{height:28px;background:var(--bg-tertiary);border-radius:14px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent-color) 0%,#7c3aed 100%);transition:width .4s ease;border-radius:14px}
+.stats{display:flex;justify-content:space-around;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-color)}
+.stat-number{font-size:24px;font-weight:700;color:var(--accent-color)}
+.stat-label{font-size:12px;color:var(--text-secondary)}
+
+/* Books grid */
+.books-container{background:var(--bg-secondary);border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px var(--shadow)}
+.book-item{padding:13px 0;border-bottom:1px solid var(--bg-tertiary);cursor:pointer}
+.book-item:last-child{border-bottom:none}
+.book-header{display:flex;justify-content:space-between;margin-bottom:6px}
+.book-progress-bar{height:5px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden}
+.book-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-color) 0%,#7c3aed 100%)}
+.chapters-view{display:none;margin-top:10px}
+.chapters-view.open{display:block}
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;margin-top:8px}
+.chapter-box{aspect-ratio:1;border:2px solid var(--border-color);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg-secondary);transition:all .15s}
+.chapter-box:hover{transform:scale(1.1)}
+.chapter-box.read{background:linear-gradient(135deg,var(--accent-color) 0%,#7c3aed 100%);color:#fff;border-color:transparent}
+.chapter-box.current-week{border-color:#f59e0b;border-width:2px}
+.chapter-box.not-current-week{opacity:.35}
+.chapter-box.read.not-current-week{opacity:.6}
+
+/* Footer buttons */
+.footer-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;margin-bottom:4px}
+.btn-save{background:#2563eb;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;transition:background .2s}
+.btn-save:hover{background:#1e40af}
+.btn-import{background:#059669;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;transition:background .2s}
+.btn-import:hover{background:#047857}
+.btn-reset{background:#ef4444;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;transition:background .2s;grid-column:1/-1}
+.btn-reset:hover{background:#dc2626}
+.import-file-input{display:none}
+
+/* Toast notification */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#1f2937;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;z-index:10000;transition:transform .3s ease;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti-piece{position:absolute;top:-12px;border-radius:2px;animation:confettiFall 2.8s ease-in forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scaleX(1);opacity:1}
+  50%{opacity:1}
+  100%{transform:translateY(105vh) rotate(900deg) scaleX(-1);opacity:0}
+}
+</style>
+</head>
+<body>
+<div id="confettiContainer" class="confetti-container"></div>
+<div id="toast" class="toast"></div>
+<div class="container">
+  <div class="header">
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
+    <h1>📖 CCC Bible Tracker</h1>
+    <p>Character-Charged Christianity</p>
+    <div class="subtitle">4-Phase · 65-Week Plan</div>
+  </div>
+  <div class="content">
+
+    <!-- Week selector -->
+    <div class="week-selector">
+      <h2>Current Week</h2>
+      <select id="weekSelect" onchange="updateWeek()"></select>
+    </div>
+
+    <!-- Phase badge -->
+    <div id="phaseBadge" style="margin-bottom:14px"></div>
+
+    <!-- Memory verse (regular weeks) -->
+    <div id="memoryCard" style="display:none"></div>
+
+    <!-- BibleProject links (regular weeks) -->
+    <div id="bpSection" style="display:none"></div>
+
+    <!-- Reading list (regular weeks) -->
+    <div id="weekReadingSection" style="display:none"></div>
+
+    <!-- Sabbath content -->
+    <div id="sabbathContent" style="display:none"></div>
+
+    <!-- OBT (all weeks) -->
+    <div id="obtSection" class="obt-section">
+      <h3>✏️ One Big Thing</h3>
+      <p>What was one big thing from your readings this week?</p>
+      <textarea id="obtTextarea" class="obt-textarea" placeholder="Your reflection..."></textarea>
+      <div id="obtSavedNote" class="obt-saved-note"></div>
+    </div>
+
+    <!-- Overall progress -->
+    <div class="overall-progress">
+      <div class="progress-header">
+        <span class="progress-title">Overall Progress</span>
+        <span class="progress-percent" id="overallPercent">0%</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="overallProgressBar" style="width:0%"></div>
+      </div>
+      <div class="stats">
+        <div><div class="stat-number" id="chaptersRead">0</div><div class="stat-label">Chapters Read</div></div>
+        <div><div class="stat-number" id="booksCompleted">0</div><div class="stat-label">Books Done</div></div>
+      </div>
+    </div>
+
+    <!-- Books of the Bible -->
+    <div class="books-container">
+      <h3 style="margin-bottom:14px;font-size:16px">Books of the Bible</h3>
+      <div id="booksContainer"></div>
+    </div>
+
+    <!-- Footer buttons -->
+    <div class="footer-buttons">
+      <button class="btn-save" onclick="saveProgressToFile()">💾 Save My Progress</button>
+      <button class="btn-import" onclick="document.getElementById('importInput').click()">📂 Import Progress</button>
+      <input type="file" id="importInput" class="import-file-input" accept=".json" onchange="importProgressFromFile(event)">
+      <button class="btn-reset" onclick="resetProgress()">🗑 Reset All Progress</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   BIBLE DATA — chapter counts for all 66 books
+   ========================================================= */
+const bibleData={
+  "Genesis":50,"Exodus":40,"Leviticus":27,"Numbers":36,"Deuteronomy":34,
+  "Joshua":24,"Judges":21,"Ruth":4,"1 Samuel":31,"2 Samuel":24,
+  "1 Kings":22,"2 Kings":25,"1 Chronicles":29,"2 Chronicles":36,
+  "Ezra":10,"Nehemiah":13,"Esther":10,"Job":42,"Psalms":150,
+  "Proverbs":31,"Ecclesiastes":12,"Song of Songs":8,"Isaiah":66,
+  "Jeremiah":52,"Lamentations":5,"Ezekiel":48,"Daniel":12,
+  "Hosea":14,"Joel":3,"Amos":9,"Obadiah":1,"Jonah":4,"Micah":7,
+  "Nahum":3,"Habakkuk":3,"Zephaniah":3,"Haggai":2,"Zechariah":14,"Malachi":4,
+  "Matthew":28,"Mark":16,"Luke":24,"John":21,"Acts":28,"Romans":16,
+  "1 Corinthians":16,"2 Corinthians":13,"Galatians":6,"Ephesians":6,
+  "Philippians":4,"Colossians":4,"1 Thessalonians":5,"2 Thessalonians":3,
+  "1 Timothy":6,"2 Timothy":4,"Titus":3,"Philemon":1,"Hebrews":13,
+  "James":5,"1 Peter":5,"2 Peter":3,"1 John":5,"2 John":1,"3 John":1,
+  "Jude":1,"Revelation":22
+};
+
+/* =========================================================
+   VERSE TEXTS — ESV translation
+   ========================================================= */
+const V={
+  gen1_27:"So God created mankind in his own image, in the image of God he created them; male and female he created them.",
+  acts2_38:"Peter replied, 'Repent and be baptized, every one of you, in the name of Jesus Christ for the forgiveness of your sins. And you will receive the gift of the Holy Spirit.'",
+  acts2_42:"They devoted themselves to the apostles' teaching and to fellowship, to the breaking of bread and to prayer.",
+  matt6_33:"But seek first the kingdom of God and his righteousness, and all these things will be added to you.",
+  heb11_1:"Now faith is the assurance of things hoped for, the conviction of things not seen. For by it the people of old received their commendation.",
+  gen50_20:"As for you, you meant evil against me, but God meant it for good, to bring it about that many people should be kept alive, as they are today.",
+  exod3_14:"God said to Moses, 'I AM WHO I AM.' And he said, 'Say this to the people of Israel: I AM has sent me to you.'",
+  exod15_13:"You have led in your steadfast love the people whom you have redeemed; you have guided them by your strength to your holy abode.",
+  heb4_16:"Let us then with confidence draw near to the throne of grace, that we may receive mercy and find grace to help in time of need.",
+  ps143_8:"Let me hear in the morning of your steadfast love, for in you I trust. Make me know the way I should go, for to you I lift up my soul.",
+  ps56_3:"When I am afraid, I put my trust in you. In God, whose word I praise, in God I trust; I shall not be afraid. What can flesh do to me?",
+  rom14_8:"For if we live, we live to the Lord, and if we die, we die to the Lord. So then, whether we live or whether we die, we are the Lord's.",
+  ps34_4:"I sought the LORD, and he answered me and delivered me from all my fears. Those who look to him are radiant, and their faces shall never be ashamed.",
+  heb4_12:"For the word of God is living and active, sharper than any two-edged sword, piercing to the division of soul and of spirit, of joints and of marrow, and discerning the thoughts and intentions of the heart.",
+  matt23_12:"Whoever exalts himself will be humbled, and whoever humbles himself will be exalted.",
+  job19_25:"For I know that my Redeemer lives, and at the last he will stand upon the earth. And after my skin has been thus destroyed, yet in my flesh I shall see God, whom I shall see for myself, and my eyes shall behold, and not another. My heart faints within me!",
+  ps49_15:"But God will ransom my soul from the power of Sheol, for he will receive me.",
+  ps27_7:"Hear, O LORD, when I cry aloud; be gracious to me and answer me! You have said, 'Seek my face.' My heart says to you, 'Your face, LORD, do I seek.'",
+  john15_5:"I am the vine; you are the branches. Whoever abides in me and I in him, he it is that bears much fruit, for apart from me you can do nothing.",
+  ps73_26:"My flesh and my heart may fail, but God is the strength of my heart and my portion forever.",
+  isa46_4:"Even to your old age I am he, and to gray hairs I will carry you. I have made, and I will bear; I will carry and will save.",
+  jer12_5:"If you have raced with men on foot, and they have wearied you, how will you compete with horses? And if in a safe land you are so trusting, what will you do in the thicket of the Jordan?",
+  lam3_21:"But this I call to mind, and therefore I have hope: The steadfast love of the LORD never ceases; his mercies never come to an end; they are new every morning; great is your faithfulness.",
+  lam3_24:"The LORD is my portion, says my soul, therefore I will hope in him. The LORD is good to those who wait for him, to the soul who seeks him. It is good that one should wait quietly for the salvation of the LORD.",
+  ezek36_26:"And I will give you a new heart, and a new spirit I will put within you. And I will remove the heart of stone from your flesh and give you a heart of flesh.",
+  zech4_6:"Then he said to me, 'This is the word of the LORD to Zerubbabel: Not by might, and not by power, but by my Spirit, says the LORD of hosts.'",
+  ps119_50:"This is my comfort in my affliction, that your promise gives me life.",
+  rev7_17:"For the Lamb in the midst of the throne will be their shepherd, and he will guide them to springs of living water, and God will wipe away every tear from their eyes.",
+  rev21_3:"And I heard a loud voice from the throne saying, 'Behold, the dwelling place of God is with man. He will dwell with them, and they will be his people, and God himself will be with them as their God. He will wipe away every tear from their eyes, and death shall be no more, neither shall there be mourning, nor crying, nor pain anymore, for the former things have passed away.' And he who was seated on the throne said, 'Behold, I am making all things new.'"
+};
+
+/* =========================================================
+   65-WEEK CCC READING PLAN — sourced from PDF
+   Week numbering matches the PDF exactly.
+   Sabbath weeks: 7, 14, 21, 28, 35, 42, 49, 56, 63
+   ========================================================= */
+const cccPlan={
+
+/* ── PHASE 1: Foundations & Beginnings (Weeks 1–16) ── */
+1:{title:"Identity & Design (Adam/Eve)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Genesis 1:27",key:"gen1_27"},
+  bp:[{l:"Genesis 1–11 Overview",u:"https://bibleproject.com/videos/genesis-1-11/"},{l:"Genesis Guide",u:"https://bibleproject.com/guides/book-of-genesis/"}],
+  readings:[{book:"Matthew",ch:[1,2]},{book:"Genesis",ch:[1,2,3,4,5]},{book:"Romans",ch:[5]},{book:"1 Corinthians",ch:[15],label:"1 Corinthians 15:20–58"},{book:"Psalms",ch:[1,2,3]}]},
+
+2:{title:"New Beginnings, Old Righteousness (Noah)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Genesis 1:27",key:"gen1_27"},
+  bp:[{l:"Genesis 1–11 Overview",u:"https://bibleproject.com/videos/genesis-1-11/"},{l:"Yakhal — Hope & Justice",u:"https://bibleproject.com/videos/yakhal-hope/"}],
+  readings:[{book:"Matthew",ch:[3,4]},{book:"Genesis",ch:[6,7,8,9,10,11]},{book:"1 Peter",ch:[3],label:"1 Peter 3:18–22"},{book:"Acts",ch:[2],label:"Acts 2:1–13"},{book:"Psalms",ch:[4,5,6]}]},
+
+3:{title:"Trust & Promise (Abraham/Sarah)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Acts 2:38",key:"acts2_38"},
+  bp:[{l:"Genesis 12–50 Overview",u:"https://bibleproject.com/videos/genesis-12-50/"},{l:"Abraham & Melchizedek",u:"https://bibleproject.com/videos/abraham-and-melchizedek/"},{l:"Why did God ask Abraham to sacrifice Isaac?",u:"https://bibleproject.com/articles/why-did-god-ask-abraham-to-sacrifice-isaac/"},{l:"Kingdom Righteousness Playlist",u:"https://www.youtube.com/playlist?list=PLH0Szn1yYNecBtv21wEMfTf0334DnyE_7"}],
+  readings:[{book:"Matthew",ch:[5,6]},{book:"Genesis",ch:[12,13,14,15,16,17,18]},{book:"Romans",ch:[4]},{book:"Galatians",ch:[3]},{book:"Psalms",ch:[7,8,9]}]},
+
+4:{title:"Family & Wrestling (Isaac/Jacob)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Acts 2:38",key:"acts2_38"},
+  bp:[{l:"Last will be First",u:"https://bibleproject.com/videos/last-will-be-first/"}],
+  readings:[{book:"Matthew",ch:[7,8]},{book:"Genesis",ch:[18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]},{book:"Romans",ch:[9],label:"Romans 9:6–26"},{book:"Hebrews",ch:[11],label:"Hebrews 11:20–21"},{book:"Psalms",ch:[10,11,12]}]},
+
+5:{title:"Providence & Resilience (Joseph)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Acts 2:42",key:"acts2_42"},
+  bp:[{l:"Old Testament Overview Collection",u:"https://bibleproject.com/videos/old-testament-tanak/"}],
+  readings:[{book:"Matthew",ch:[9,10]},{book:"Genesis",ch:[34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]},{book:"Acts",ch:[7],label:"Acts 7:9–16"},{book:"Romans",ch:[8],label:"Romans 8:28–39"},{book:"Psalms",ch:[13,14,15]},{book:"Acts",ch:[1,2,3],label:"Acts 1–3"}]},
+
+6:{title:"Deliverance (Moses/Exodus)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Acts 2:42",key:"acts2_42"},
+  bp:[{l:"Exodus 1–18 Overview",u:"https://bibleproject.com/videos/exodus-1-18/"},{l:"Exodus Guide",u:"https://bibleproject.com/guides/book-of-exodus/"}],
+  readings:[{book:"Matthew",ch:[11,12]},{book:"Exodus",ch:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"Hebrews",ch:[11],label:"Hebrews 11:23–29"},{book:"Psalms",ch:[16,17,18]},{book:"Acts",ch:[4,5,6],label:"Acts 4–6"}]},
+
+7:{title:"Sabbath: Catch-up & Contemplation",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:true,isJubilee:false,block:[1,2,3,4,5,6]},
+
+8:{title:"Holiness & Covenant (Sinai)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Matthew 6:33",key:"matt6_33"},
+  bp:[{l:"The Wilderness — Overview Collection",u:"https://bibleproject.com/videos/the-wilderness/"}],
+  readings:[{book:"Matthew",ch:[13,14]},{book:"Exodus",ch:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Psalms",ch:[19,20,21]},{book:"Acts",ch:[7,8],label:"Acts 7–8"}]},
+
+9:{title:"Presence & Priesthood",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Matthew 6:33",key:"matt6_33"},
+  bp:[{l:"Leviticus Overview",u:"https://bibleproject.com/videos/leviticus/"},{l:"Leviticus Guide",u:"https://bibleproject.com/guides/book-of-leviticus/"}],
+  readings:[{book:"Matthew",ch:[15,16]},{book:"Exodus",ch:[25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]},{book:"Leviticus",ch:[1,2,3,4,5,6,7]},{book:"Hebrews",ch:[7,8,9,10]},{book:"Psalms",ch:[22,23,24]},{book:"Acts",ch:[9,10],label:"Acts 9–10"}]},
+
+10:{title:"Wilderness & Testing",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Hebrews 11:1-2",key:"heb11_1"},
+  bp:[{l:"Numbers Overview",u:"https://bibleproject.com/videos/numbers/"}],
+  readings:[{book:"Matthew",ch:[17,18]},{book:"Leviticus",ch:[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]},{book:"Numbers",ch:[1,2,3,4,5,6]},{book:"1 Corinthians",ch:[10],label:"1 Corinthians 10:1–13"},{book:"Psalms",ch:[25,26,27]},{book:"Acts",ch:[11,12],label:"Acts 11–12"}]},
+
+11:{title:"Guidance & Discernment",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Hebrews 11:1-2",key:"heb11_1"},
+  bp:[{l:"Numbers Guide",u:"https://bibleproject.com/guides/book-of-numbers/"}],
+  readings:[{book:"Matthew",ch:[19,20]},{book:"Numbers",ch:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"Psalms",ch:[28,29,30]},{book:"Acts",ch:[13,14],label:"Acts 13–14"}]},
+
+12:{title:"Toward the Land & Courage",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Genesis 50:20",key:"gen50_20"},
+  bp:[{l:"Numbers Overview",u:"https://bibleproject.com/videos/numbers/"}],
+  readings:[{book:"Matthew",ch:[21,22]},{book:"Numbers",ch:[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]},{book:"Psalms",ch:[31,32,33]},{book:"Acts",ch:[15,16],label:"Acts 15–16"}]},
+
+13:{title:"Remember & Renew (Deuteronomy)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Genesis 50:20",key:"gen50_20"},
+  bp:[{l:"Deuteronomy Overview",u:"https://bibleproject.com/videos/deuteronomy/"},{l:"Deuteronomy Guide",u:"https://bibleproject.com/guides/book-of-deuteronomy/"}],
+  readings:[{book:"Matthew",ch:[23,24]},{book:"Deuteronomy",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]},{book:"Psalms",ch:[34,35,36]},{book:"Acts",ch:[17,18],label:"Acts 17–18"}]},
+
+14:{title:"Sabbath: Catch-up & Contemplation",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:true,isJubilee:false,block:[8,9,10,11,12,13]},
+
+15:{title:"Trust over Control (Joshua)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Exodus 3:14",key:"exod3_14"},
+  bp:[{l:"Joshua Overview",u:"https://bibleproject.com/videos/joshua/"}],
+  readings:[{book:"Matthew",ch:[25,26]},{book:"Deuteronomy",ch:[18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34]},{book:"Joshua",ch:[1,2,3,4,5,6]},{book:"Psalms",ch:[37,38,39]},{book:"Acts",ch:[19,20],label:"Acts 19–20"}]},
+
+16:{title:"Loyal Love (Judges & Ruth)",phase:1,phaseTitle:"Foundations & Beginnings",isSabbath:false,
+  memory:{ref:"Exodus 3:14",key:"exod3_14"},
+  bp:[{l:"Judges Overview",u:"https://bibleproject.com/videos/judges/"},{l:"Ruth Overview",u:"https://bibleproject.com/videos/ruth/"}],
+  readings:[{book:"Matthew",ch:[27,28]},{book:"Joshua",ch:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Ruth",ch:[1]},{book:"Psalms",ch:[40,41]},{book:"Acts",ch:[21,22,23],label:"Acts 21–23"}]},
+
+/* ── PHASE 2: Leaders, Worship & Wisdom (Weeks 17–34) ── */
+17:{title:"Integrity (Judges)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Exodus 15:13",key:"exod15_13"},
+  bp:[{l:"Judges Guide",u:"https://bibleproject.com/guides/book-of-judges/"}],
+  readings:[{book:"Mark",ch:[1,2]},{book:"Judges",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"Ruth",ch:[2]},{book:"Psalms",ch:[42,43,44]},{book:"Acts",ch:[24,25,26,27,28],label:"Acts 24–28"}]},
+
+18:{title:"Listening Leadership (Samuel/Saul)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Exodus 15:13",key:"exod15_13"},
+  bp:[{l:"1 Samuel Overview",u:"https://bibleproject.com/videos/1-samuel/"},{l:"Samuel Guide",u:"https://bibleproject.com/guides/books-of-samuel/"}],
+  readings:[{book:"Mark",ch:[3,4]},{book:"1 Samuel",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]},{book:"Ruth",ch:[3]},{book:"Psalms",ch:[45,46]},{book:"Romans",ch:[1,2,3,4]}]},
+
+19:{title:"Calling (David's Rise)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Hebrews 4:16",key:"heb4_16"},
+  bp:[{l:"1 Samuel Overview",u:"https://bibleproject.com/videos/1-samuel/"}],
+  readings:[{book:"Mark",ch:[5,6]},{book:"1 Samuel",ch:[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},{book:"Psalms",ch:[47,48,49]},{book:"Romans",ch:[5,6,7,8]}]},
+
+20:{title:"Mercy & Truth (David King)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Hebrews 4:16",key:"heb4_16"},
+  bp:[{l:"2 Samuel Overview",u:"https://bibleproject.com/videos/2-samuel/"}],
+  readings:[{book:"Mark",ch:[7,8]},{book:"2 Samuel",ch:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"Psalms",ch:[50,51,52,53]},{book:"Romans",ch:[9,10,11,12]}]},
+
+21:{title:"Sabbath: Catch-up & Contemplation",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:true,isJubilee:false,block:[15,16,17,18,19,20]},
+
+22:{title:"Trials & Humility (David)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 143:8",key:"ps143_8"},
+  bp:[{l:"2 Samuel Overview",u:"https://bibleproject.com/videos/2-samuel/"}],
+  readings:[{book:"Mark",ch:[9,10]},{book:"2 Samuel",ch:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Psalms",ch:[54,55,56]},{book:"Romans",ch:[13,14,15,16]}]},
+
+23:{title:"Wisdom & Desire (Solomon)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 143:8",key:"ps143_8"},
+  bp:[{l:"Kings Overview",u:"https://bibleproject.com/videos/kings/"},{l:"Kings Guide",u:"https://bibleproject.com/guides/books-of-kings/"}],
+  readings:[{book:"Mark",ch:[11,12]},{book:"1 Kings",ch:[3,4,5,6,7,8,9,10,11]},{book:"Psalms",ch:[57,58,59]},{book:"1 Corinthians",ch:[1,2,3,4]}]},
+
+24:{title:"Faithfulness (Divided Kingdom/Elijah)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 56:3-4",key:"ps56_3"},
+  bp:[{l:"Kings Guide",u:"https://bibleproject.com/guides/books-of-kings/"}],
+  readings:[{book:"Mark",ch:[13,14]},{book:"1 Kings",ch:[12,13,14,15,16,17,18,19,20,21,22]},{book:"2 Kings",ch:[1,2]},{book:"Psalms",ch:[60,61,62]},{book:"1 Corinthians",ch:[5,6,7,8]}]},
+
+25:{title:"Hope under Decline (Elisha/Kings)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 56:3-4",key:"ps56_3"},
+  bp:[{l:"Kings Overview",u:"https://bibleproject.com/videos/kings/"}],
+  readings:[{book:"Mark",ch:[15,16]},{book:"2 Kings",ch:[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]},{book:"Psalms",ch:[63,64,65]},{book:"1 Corinthians",ch:[9,10,11,12]}]},
+
+26:{title:"Temple & Worship (Chronicles)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Romans 14:8",key:"rom14_8"},
+  bp:[{l:"Chronicles Overview",u:"https://bibleproject.com/videos/chronicles/"},{l:"Chronicles Guide",u:"https://bibleproject.com/guides/books-of-chronicles/"}],
+  readings:[{book:"Luke",ch:[1,2]},{book:"1 Chronicles",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},{book:"Psalms",ch:[66,67,68]},{book:"1 Corinthians",ch:[13,14,15,16]}]},
+
+27:{title:"King & Praise (Davidic Covenant)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Romans 14:8",key:"rom14_8"},
+  bp:[{l:"Chronicles Guide",u:"https://bibleproject.com/guides/books-of-chronicles/"}],
+  readings:[{book:"Luke",ch:[3,4]},{book:"1 Chronicles",ch:[17,18,19,20,21,22,23,24,25,26,27,28,29]},{book:"Psalms",ch:[69,70,71]},{book:"2 Corinthians",ch:[1,2,3,4]}]},
+
+28:{title:"Sabbath: Catch-up & Contemplation",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:true,isJubilee:false,block:[22,23,24,25,26,27]},
+
+29:{title:"Order & Peace (Solomon)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 34:4-5",key:"ps34_4"},
+  bp:[{l:"Chronicles Overview",u:"https://bibleproject.com/videos/chronicles/"}],
+  readings:[{book:"Luke",ch:[5,6]},{book:"2 Chronicles",ch:[1,2,3,4,5,6,7,8,9]},{book:"Psalms",ch:[72,73,74]},{book:"2 Corinthians",ch:[5,6,7,8,9]}]},
+
+30:{title:"Perseverance (Kings & Prophets)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Psalm 34:4-5",key:"ps34_4"},
+  bp:[{l:"Kings Guide",u:"https://bibleproject.com/guides/books-of-kings/"}],
+  readings:[{book:"Luke",ch:[7,8]},{book:"2 Chronicles",ch:[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]},{book:"Psalms",ch:[75,76,77]},{book:"2 Corinthians",ch:[10,11,12,13]}]},
+
+31:{title:"Reform (Hezekiah/Josiah)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Hebrews 4:12",key:"heb4_12"},
+  bp:[{l:"Kings Guide",u:"https://bibleproject.com/guides/books-of-kings/"}],
+  readings:[{book:"Luke",ch:[9,10]},{book:"2 Chronicles",ch:[29,30,31,32,33,34,35,36]},{book:"Psalms",ch:[78,79,80]},{book:"Galatians",ch:[1,2,3,4,5,6]}]},
+
+32:{title:"Word & Community (Ezra)",phase:2,phaseTitle:"Leaders, Worship & Wisdom",isSabbath:false,
+  memory:{ref:"Hebrews 4:12",key:"heb4_12"},
+  bp:[{l:"Ezra–Nehemiah Overview",u:"https://bibleproject.com/videos/ezra-nehemiah/"},{l:"Ezra–Nehemiah Guide",u:"https://bibleproject.com/guides/book-of-ezra-nehemiah/"}],
+  readings:[{book:"Luke",ch:[11,12]},{book:"Ezra",ch:[1,2,3,4,5,6,7,8,9,10]},{book:"Psalms",ch:[81,82,83]},{book:"Ephesians",ch:[1,2,3,4,5,6]}]},
+
+/* ── PHASE 3: Resilience, Wisdom & Major Prophets (Weeks 33–48) ── */
+33:{title:"Building & Boundaries (Nehemiah)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Matthew 23:12",key:"matt23_12"},
+  bp:[{l:"Ezra–Nehemiah Guide",u:"https://bibleproject.com/guides/book-of-ezra-nehemiah/"}],
+  readings:[{book:"Luke",ch:[13,14]},{book:"Nehemiah",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13]},{book:"Psalms",ch:[84,85,86]},{book:"Philippians",ch:[1,2,3,4]}]},
+
+34:{title:"Providence & Courage (Esther)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Matthew 23:12",key:"matt23_12"},
+  bp:[{l:"Esther Overview",u:"https://bibleproject.com/videos/esther/"},{l:"Esther Guide",u:"https://bibleproject.com/guides/book-of-esther/"}],
+  readings:[{book:"Luke",ch:[15,16]},{book:"Esther",ch:[1,2,3,4,5,6,7,8,9,10]},{book:"Psalms",ch:[87,88,89]},{book:"Colossians",ch:[1,2,3,4]}]},
+
+35:{title:"Sabbath: Catch-up & Contemplation",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:true,isJubilee:false,block:[29,30,31,32,33,34]},
+
+36:{title:"Honest Faith (Job 1–21)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Job 19:25-27",key:"job19_25"},
+  bp:[{l:"Job Overview",u:"https://bibleproject.com/videos/job/"},{l:"Job Guide",u:"https://bibleproject.com/guides/book-of-job/"}],
+  readings:[{book:"Luke",ch:[17,18]},{book:"Job",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]},{book:"Psalms",ch:[90,91,92]},{book:"1 Thessalonians",ch:[1,2,3,4,5]}]},
+
+37:{title:"Patience & Hope (Job 22–42)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Job 19:25-27",key:"job19_25"},
+  bp:[{l:"Job Guide",u:"https://bibleproject.com/guides/book-of-job/"}],
+  readings:[{book:"Luke",ch:[19,20]},{book:"Job",ch:[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]},{book:"Psalms",ch:[93,94,95]},{book:"2 Thessalonians",ch:[1,2,3]}]},
+
+38:{title:"Everyday Wisdom (Proverbs 1–15)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 49:15",key:"ps49_15"},
+  bp:[{l:"Proverbs Overview",u:"https://bibleproject.com/videos/proverbs/"}],
+  readings:[{book:"Luke",ch:[21,22]},{book:"Proverbs",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]},{book:"Psalms",ch:[96,97,98]},{book:"1 Timothy",ch:[1,2,3,4,5,6]}]},
+
+39:{title:"Meaning (Proverbs 16–31; Ecclesiastes 1–6)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 49:15",key:"ps49_15"},
+  bp:[{l:"Ecclesiastes Overview",u:"https://bibleproject.com/videos/ecclesiastes/"}],
+  readings:[{book:"Luke",ch:[23,24]},{book:"Proverbs",ch:[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},{book:"Ecclesiastes",ch:[1,2,3,4,5,6]},{book:"Psalms",ch:[99,100,101]},{book:"2 Timothy",ch:[1,2,3,4]}]},
+
+40:{title:"Desire & Meaning (Ecclesiastes; Song of Songs 1–4)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 27:7-8",key:"ps27_7"},
+  bp:[{l:"Song of Songs Overview",u:"https://bibleproject.com/videos/song-songs/"}],
+  readings:[{book:"John",ch:[1]},{book:"Ecclesiastes",ch:[7,8,9,10,11,12]},{book:"Song of Songs",ch:[1,2,3,4]},{book:"Psalms",ch:[102,103,104]},{book:"Titus",ch:[1,2,3]},{book:"Philemon",ch:[1]}]},
+
+41:{title:"Love & Purity (Song of Songs 5–8; Isaiah 1–5)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 27:7-8",key:"ps27_7"},
+  bp:[{l:"Isaiah 1–39 Overview",u:"https://bibleproject.com/videos/isaiah-1-39/"}],
+  readings:[{book:"John",ch:[2]},{book:"Song of Songs",ch:[5,6,7,8]},{book:"Isaiah",ch:[1,2,3,4,5]},{book:"Psalms",ch:[105,106]},{book:"Hebrews",ch:[1,2,3,4,5,6]}]},
+
+42:{title:"Sabbath: Catch-up & Contemplation",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:true,isJubilee:false,block:[36,37,38,39,40,41]},
+
+43:{title:"Call & Holiness (Isaiah 6–12)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"John 15:5",key:"john15_5"},
+  bp:[{l:"Isaiah Guide",u:"https://bibleproject.com/guides/book-of-isaiah/"}],
+  readings:[{book:"John",ch:[3]},{book:"Isaiah",ch:[6,7,8,9,10,11,12]},{book:"Psalms",ch:[107,108,109]},{book:"Hebrews",ch:[7,8,9,10]}]},
+
+44:{title:"Nations (Isaiah 13–23)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"John 15:5",key:"john15_5"},
+  bp:[{l:"Isaiah 1–39 Overview",u:"https://bibleproject.com/videos/isaiah-1-39/"}],
+  readings:[{book:"John",ch:[4]},{book:"Isaiah",ch:[13,14,15,16,17,18,19,20,21,22,23]},{book:"Psalms",ch:[110,111,112]},{book:"Hebrews",ch:[11,12,13]}]},
+
+45:{title:"Trust (Isaiah 24–39)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 73:26",key:"ps73_26"},
+  bp:[{l:"Isaiah 1–39 Overview",u:"https://bibleproject.com/videos/isaiah-1-39/"}],
+  readings:[{book:"John",ch:[5]},{book:"Isaiah",ch:[24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39]},{book:"Psalms",ch:[113,114,115]},{book:"James",ch:[1,2,3,4,5]}]},
+
+46:{title:"Servant (Isaiah 40–48)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Psalm 73:26",key:"ps73_26"},
+  bp:[{l:"Isaiah Guide",u:"https://bibleproject.com/guides/book-of-isaiah/"}],
+  readings:[{book:"John",ch:[6]},{book:"Isaiah",ch:[40,41,42,43,44,45,46,47,48]},{book:"Psalms",ch:[116,117,118]},{book:"1 Peter",ch:[1,2,3,4,5]}]},
+
+47:{title:"New Creation (Isaiah 49–66)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Isaiah 46:4",key:"isa46_4"},
+  bp:[{l:"Isaiah Guide",u:"https://bibleproject.com/guides/book-of-isaiah/"}],
+  readings:[{book:"John",ch:[7]},{book:"Isaiah",ch:[49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66]},{book:"Psalms",ch:[119],label:"Psalm 119:1–24"},{book:"2 Peter",ch:[1,2,3]}]},
+
+48:{title:"Call & Courage (Jeremiah 1–13)",phase:3,phaseTitle:"Resilience, Wisdom & Major Prophets",isSabbath:false,
+  memory:{ref:"Isaiah 46:4",key:"isa46_4"},
+  bp:[{l:"Jeremiah Overview",u:"https://bibleproject.com/videos/jeremiah/"},{l:"Jeremiah Guide",u:"https://bibleproject.com/guides/book-of-jeremiah/"}],
+  readings:[{book:"John",ch:[8]},{book:"Jeremiah",ch:[1,2,3,4,5,6,7,8,9,10,11,12,13]},{book:"Psalms",ch:[119],label:"Psalm 119:25–48"},{book:"1 John",ch:[1,2,3,4,5]}]},
+
+/* ── PHASE 4: Grief, Exile, Renewal & The Twelve (Weeks 49–65) ── */
+49:{title:"Sabbath & Jubilee: Catch-up & Contemplation",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:true,isJubilee:true,block:[43,44,45,46,47,48]},
+
+50:{title:"Covenant Heart (Jeremiah 14–29)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Jeremiah 12:5",key:"jer12_5"},
+  bp:[{l:"Jeremiah Guide",u:"https://bibleproject.com/guides/book-of-jeremiah/"}],
+  readings:[{book:"John",ch:[9]},{book:"Jeremiah",ch:[14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]},{book:"Psalms",ch:[119],label:"Psalm 119:49–72"},{book:"2 John",ch:[1]},{book:"3 John",ch:[1]},{book:"Jude",ch:[1]}]},
+
+51:{title:"Grief & Presence (Jeremiah 30–39; Lamentations)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Jeremiah 12:5",key:"jer12_5"},
+  bp:[{l:"Lamentations Overview",u:"https://bibleproject.com/videos/lamentations/"},{l:"Lamentations Guide",u:"https://bibleproject.com/guides/book-of-lamentations/"}],
+  readings:[{book:"John",ch:[10]},{book:"Jeremiah",ch:[30,31,32,33,34,35,36,37,38,39]},{book:"Lamentations",ch:[1,2,3,4,5]},{book:"Psalms",ch:[119],label:"Psalm 119:73–96"},{book:"Revelation",ch:[1,2,3,4,5]}]},
+
+52:{title:"Hope & Future (Jeremiah 40–52)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Lamentations 3:21-23",key:"lam3_21"},
+  bp:[{l:"Jeremiah Overview",u:"https://bibleproject.com/videos/jeremiah/"}],
+  readings:[{book:"John",ch:[11]},{book:"Jeremiah",ch:[40,41,42,43,44,45,46,47,48,49,50,51,52]},{book:"Psalms",ch:[119],label:"Psalm 119:97–120"},{book:"Revelation",ch:[6,7,8,9]}]},
+
+53:{title:"Glory & Spirit (Ezekiel 1–12)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Lamentations 3:21-23",key:"lam3_21"},
+  bp:[{l:"Ezekiel Guide",u:"https://bibleproject.com/guides/book-of-ezekiel/"}],
+  readings:[{book:"John",ch:[12]},{book:"Ezekiel",ch:[1,2,3,4,5,6,7,8,9,10,11,12]},{book:"Psalms",ch:[119],label:"Psalm 119:121–144"},{book:"Revelation",ch:[10,11,12,13]}]},
+
+54:{title:"New Heart & Shepherd (Ezekiel 13–24)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Lamentations 3:24-26",key:"lam3_24"},
+  bp:[{l:"Ezekiel's Gospel — Article",u:"https://bibleproject.com/articles/ezekiels-gospel/"}],
+  readings:[{book:"John",ch:[13]},{book:"Ezekiel",ch:[13,14,15,16,17,18,19,20,21,22,23,24]},{book:"Psalms",ch:[119],label:"Psalm 119:145–176"},{book:"Revelation",ch:[14,15,16,17]}]},
+
+55:{title:"Nations & Justice (Ezekiel 25–33)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Lamentations 3:24-26",key:"lam3_24"},
+  bp:[{l:"Ezekiel 1–33 Overview",u:"https://bibleproject.com/videos/ezekiel-1-33/"}],
+  readings:[{book:"John",ch:[14]},{book:"Ezekiel",ch:[25,26,27,28,29,30,31,32,33]},{book:"Psalms",ch:[120,121,122]},{book:"Revelation",ch:[18,19,20]}]},
+
+56:{title:"Sabbath: Catch-up & Contemplation",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:true,isJubilee:false,block:[50,51,52,53,54,55]},
+
+57:{title:"Temple Vision (Ezekiel 34–48)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Ezekiel 36:26",key:"ezek36_26"},
+  bp:[{l:"Ezekiel — Classroom Overview",u:"https://bibleproject.com/classroom/ezekiel/overview"}],
+  readings:[{book:"John",ch:[15]},{book:"Ezekiel",ch:[34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]},{book:"Psalms",ch:[123,124,125]},{book:"Revelation",ch:[21,22]}]},
+
+58:{title:"Faith under Empire (Daniel 1–8)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Ezekiel 36:26",key:"ezek36_26"},
+  bp:[{l:"Daniel Overview",u:"https://bibleproject.com/videos/daniel/"},{l:"Daniel Guide",u:"https://bibleproject.com/guides/book-of-daniel/"}],
+  readings:[{book:"John",ch:[16]},{book:"Daniel",ch:[1,2,3,4,5,6,7,8]},{book:"Psalms",ch:[126,127,128]}]},
+
+59:{title:"Prayer & Future (Daniel 9–12; Hosea 1–7)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Zechariah 4:6",key:"zech4_6"},
+  bp:[{l:"Daniel Guide",u:"https://bibleproject.com/guides/book-of-daniel/"},{l:"Hosea Overview",u:"https://bibleproject.com/videos/hosea/"}],
+  readings:[{book:"John",ch:[17]},{book:"Daniel",ch:[9,10,11,12]},{book:"Hosea",ch:[1,2,3,4,5,6,7]},{book:"Matthew",ch:[24],label:"Matthew 24 (Olivet Discourse)"},{book:"Mark",ch:[13],label:"Mark 13 (Olivet Discourse)"},{book:"Romans",ch:[9,10,11]},{book:"Psalms",ch:[129,130,131]}]},
+
+60:{title:"Love & Justice (Hosea 8–14; Joel; Amos 1–4)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Zechariah 4:6",key:"zech4_6"},
+  bp:[{l:"Hosea Guide",u:"https://bibleproject.com/guides/book-of-hosea/"},{l:"Joel Overview",u:"https://bibleproject.com/videos/joel/"},{l:"Amos Overview",u:"https://bibleproject.com/videos/amos/"}],
+  readings:[{book:"John",ch:[18]},{book:"Hosea",ch:[8,9,10,11,12,13,14]},{book:"Joel",ch:[1,2,3]},{book:"Amos",ch:[1,2,3,4]},{book:"Ephesians",ch:[5]},{book:"Psalms",ch:[132,133,134]}]},
+
+61:{title:"Repentance & Mission (Amos 5–9; Obadiah; Jonah)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Psalm 119:50",key:"ps119_50"},
+  bp:[{l:"Amos Guide",u:"https://bibleproject.com/guides/book-of-amos/"},{l:"Obadiah Overview",u:"https://bibleproject.com/videos/obadiah/"},{l:"Jonah Overview",u:"https://bibleproject.com/videos/jonah/"}],
+  readings:[{book:"John",ch:[19]},{book:"Amos",ch:[5,6,7,8,9]},{book:"Obadiah",ch:[1]},{book:"Jonah",ch:[1,2,3,4]},{book:"James",ch:[2,5]},{book:"Matthew",ch:[12],label:"Matthew 12:38–41"},{book:"Psalms",ch:[135,136,137]}]},
+
+62:{title:"Humility & Courage (Micah; Nahum)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Psalm 119:50",key:"ps119_50"},
+  bp:[{l:"Micah Overview",u:"https://bibleproject.com/videos/micah/"},{l:"Nahum Overview",u:"https://bibleproject.com/videos/nahum/"}],
+  readings:[{book:"John",ch:[20]},{book:"Micah",ch:[1,2,3,4,5,6,7]},{book:"Nahum",ch:[1,2,3]},{book:"Matthew",ch:[5,6,7],label:"Matthew 5–7 (Sermon on the Mount)"},{book:"Romans",ch:[12]},{book:"Psalms",ch:[138,139,140]}]},
+
+63:{title:"Sabbath: Catch-up & Contemplation — Nearly There!",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:true,isJubilee:false,block:[57,58,59,60,61,62]},
+
+64:{title:"Faith & Renewal (Habakkuk; Zephaniah; Haggai; Zechariah 1–7)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Revelation 7:17",key:"rev7_17"},
+  bp:[{l:"Habakkuk Overview",u:"https://bibleproject.com/videos/habakkuk/"},{l:"Zephaniah Overview",u:"https://bibleproject.com/videos/zephaniah/"},{l:"Haggai Overview",u:"https://bibleproject.com/videos/haggai/"},{l:"Zechariah Guide",u:"https://bibleproject.com/guides/book-of-zechariah/"}],
+  readings:[{book:"John",ch:[21]},{book:"Habakkuk",ch:[1,2,3]},{book:"Zephaniah",ch:[1,2,3]},{book:"Haggai",ch:[1,2]},{book:"Zechariah",ch:[1,2,3,4,5,6,7]},{book:"Hebrews",ch:[10,11,12]},{book:"1 Peter",ch:[2]},{book:"Psalms",ch:[141,142,143]}]},
+
+65:{title:"Hope & Home (Zechariah 8–14; Malachi)",phase:4,phaseTitle:"Grief, Exile, Renewal & The Twelve",isSabbath:false,
+  memory:{ref:"Revelation 21:3-5",key:"rev21_3"},
+  bp:[{l:"Zechariah Overview",u:"https://bibleproject.com/videos/zechariah/"},{l:"OT Guides Index (Malachi)",u:"https://bibleproject.com/guides/categories/old-testament/"}],
+  readings:[{book:"John",ch:[1],label:"John 1 (re-read)"},{book:"Zechariah",ch:[8,9,10,11,12,13,14]},{book:"Malachi",ch:[1,2,3,4]},{book:"Psalms",ch:[144,145,146,147,148,149,150]}]}
+
+};
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let readChapters={};
+let currentWeek=1;
+let darkMode=false;
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init(){
+  loadFromLocalStorage();
+  populateWeekSelector();
+  updateWeek();
+  renderBooks();
+  updateOverallProgress();
+}
+
+function loadFromLocalStorage(){
+  const saved=localStorage.getItem('cccBibleProgress');
+  if(saved) readChapters=JSON.parse(saved);
+  const savedWeek=localStorage.getItem('cccCurrentWeek');
+  if(savedWeek) currentWeek=parseInt(savedWeek);
+  const savedDark=localStorage.getItem('cccDarkMode');
+  if(savedDark==='true'){
+    darkMode=true;
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('darkModeBtn').textContent='☀️';
+  }
+}
+
+function saveToLocalStorage(){
+  localStorage.setItem('cccBibleProgress',JSON.stringify(readChapters));
+  localStorage.setItem('cccCurrentWeek',currentWeek.toString());
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+function toggleDarkMode(){
+  darkMode=!darkMode;
+  if(darkMode){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('darkModeBtn').textContent='☀️';
+  }else{
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('darkModeBtn').textContent='🌙';
+  }
+  localStorage.setItem('cccDarkMode',darkMode.toString());
+}
+
+/* =========================================================
+   WEEK SELECTOR
+   ========================================================= */
+function populateWeekSelector(){
+  const select=document.getElementById('weekSelect');
+  select.innerHTML='';
+  for(let i=1;i<=65;i++){
+    const w=cccPlan[i];
+    const option=document.createElement('option');
+    option.value=i;
+    option.textContent=w.isSabbath
+      ? `Week ${i}: 🌿 ${w.title}`
+      : `Week ${i}: ${w.title}`;
+    if(i===currentWeek) option.selected=true;
+    select.appendChild(option);
+  }
+}
+
+function updateWeek(){
+  const select=document.getElementById('weekSelect');
+  currentWeek=parseInt(select.value);
+  saveToLocalStorage();
+  const w=cccPlan[currentWeek];
+
+  // Phase badge
+  renderPhaseBadge(w);
+
+  if(w.isSabbath){
+    document.getElementById('memoryCard').style.display='none';
+    document.getElementById('bpSection').style.display='none';
+    document.getElementById('weekReadingSection').style.display='none';
+    document.getElementById('sabbathContent').style.display='block';
+    renderSabbathContent(w);
+  } else {
+    document.getElementById('sabbathContent').style.display='none';
+    renderMemoryCard(w);
+    renderBPLinks(w);
+    renderReadingSection(w);
+  }
+
+  loadOBT();
+  renderBooks();
+}
+
+/* =========================================================
+   PHASE BADGE
+   ========================================================= */
+function renderPhaseBadge(w){
+  const badge=document.getElementById('phaseBadge');
+  const cls=w.isSabbath?'phase-sabbath':`phase-${w.phase}`;
+  badge.innerHTML=`<span class="phase-badge ${cls}">Phase ${w.phase} · ${w.phaseTitle}</span>`;
+}
+
+/* =========================================================
+   MEMORY VERSE CARD
+   ========================================================= */
+function renderMemoryCard(w){
+  const el=document.getElementById('memoryCard');
+  el.style.display='block';
+  el.innerHTML=`
+    <div class="memory-card" id="memCardInner" onclick="toggleVerseReveal()">
+      <div class="memory-card-label">📜 Memory Verse</div>
+      <div class="memory-card-ref">${w.memory.ref}</div>
+      <div class="memory-card-hint">Tap to reveal verse</div>
+      <div class="memory-card-text">${V[w.memory.key]||''}</div>
+    </div>`;
+}
+
+function toggleVerseReveal(){
+  const card=document.getElementById('memCardInner');
+  if(card) card.classList.toggle('revealed');
+}
+
+/* =========================================================
+   BIBLEPROJECT LINKS
+   ========================================================= */
+function renderBPLinks(w){
+  const el=document.getElementById('bpSection');
+  if(!w.bp||w.bp.length===0){el.style.display='none';return;}
+  el.style.display='block';
+  el.innerHTML=`<div class="bp-section"><h3>📺 BibleProject Resources</h3>${
+    w.bp.map(b=>`<a class="bp-link" href="${b.u}" target="_blank" rel="noopener">${b.l}</a>`).join('')
+  }</div>`;
+}
+
+/* =========================================================
+   READING LIST
+   ========================================================= */
+function renderReadingSection(w){
+  const el=document.getElementById('weekReadingSection');
+  el.style.display='block';
+
+  const allComplete=isWeekComplete(w);
+  const btnClass=allComplete?'mark-week-btn done':'mark-week-btn';
+  const btnText=allComplete?'✓ Week Complete — Tap to Undo':'Mark This Week Complete';
+
+  el.innerHTML=`
+    <div class="week-reading-section">
+      <h3>Week ${currentWeek}: ${w.title}</h3>
+      <div id="readingList"></div>
+      <button class="${btnClass}" id="markWeekBtn" onclick="markWeekAsRead()">${btnText}</button>
+    </div>`;
+
+  renderReadingItems(w);
+}
+
+function renderReadingItems(w){
+  const container=document.getElementById('readingList');
+  if(!container) return;
+  container.innerHTML='';
+  w.readings.forEach((r,idx)=>{
+    const done=isReadingComplete(r);
+    const label=r.label||autoLabel(r);
+    const div=document.createElement('div');
+    div.className='reading-item'+(done?' completed':'');
+    div.textContent=label;
+    div.onclick=()=>toggleReading(r,w);
+    container.appendChild(div);
+  });
+}
+
+function autoLabel(r){
+  if(r.ch.length===1) return `${r.book} ${r.ch[0]}`;
+  return `${r.book} ${r.ch[0]}–${r.ch[r.ch.length-1]}`;
+}
+
+function isReadingComplete(r){
+  return r.ch.every(c=>isChapterRead(r.book,c));
+}
+
+function isWeekComplete(w){
+  return w.readings.every(r=>isReadingComplete(r));
+}
+
+function toggleReading(r,w){
+  const done=isReadingComplete(r);
+  r.ch.forEach(c=>{
+    if(!readChapters[r.book]) readChapters[r.book]=[];
+    if(!done&&!readChapters[r.book].includes(c)){
+      readChapters[r.book].push(c);
+    } else if(done){
+      readChapters[r.book]=readChapters[r.book].filter(x=>x!==c);
+    }
+  });
+  saveToLocalStorage();
+  updateOverallProgress();
+  renderReadingItems(w);
+  updateMarkWeekButton(w);
+  renderBooks();
+  const cv=document.getElementById(`chapters-${r.book}`);
+  if(cv&&cv.classList.contains('open')) renderChapters(r.book);
+}
+
+function updateMarkWeekButton(w){
+  const btn=document.getElementById('markWeekBtn');
+  if(!btn) return;
+  const done=isWeekComplete(w);
+  btn.className=done?'mark-week-btn done':'mark-week-btn';
+  btn.textContent=done?'✓ Week Complete — Tap to Undo':'Mark This Week Complete';
+}
+
+function markWeekAsRead(){
+  const w=cccPlan[currentWeek];
+  if(w.isSabbath) return;
+  const wasComplete=isWeekComplete(w);
+  w.readings.forEach(r=>{
+    r.ch.forEach(c=>markChapterRead(r.book,c,!wasComplete));
+  });
+  saveToLocalStorage();
+  updateOverallProgress();
+  renderReadingItems(w);
+  updateMarkWeekButton(w);
+  renderBooks();
+  if(!wasComplete) launchConfetti();
+}
+
+/* =========================================================
+   SABBATH CONTENT
+   ========================================================= */
+function renderSabbathContent(w){
+  const el=document.getElementById('sabbathContent');
+  const jubilee=w.isJubilee;
+  let html=`
+    <div class="sabbath-header${jubilee?' jubilee':''}">
+      <h2>${jubilee?'🎉 Sabbath & Jubilee!':'🌿 Sabbath Week'}</h2>
+      <p>${jubilee
+        ?'A double rest — the halfway Jubilee! Catch up on any readings, celebrate how far you\'ve come, and press on.'
+        :'A week to rest, catch up on any missed readings, review what God has been teaching you, and breathe.'
+      }</p>
+    </div>`;
+
+  // Catch-up: unread from block
+  html+=renderCatchupHTML(w.block);
+
+  // Block memory verse cards
+  html+=renderBlockMemoryHTML(w.block);
+
+  // Block OBT recap
+  html+=renderBlockOBTHTML(w.block);
+
+  el.innerHTML=html;
+
+  // Attach toggle listeners for block memory cards
+  el.querySelectorAll('.block-memory-card').forEach(card=>{
+    card.addEventListener('click',()=>card.classList.toggle('revealed'));
+  });
+}
+
+function renderCatchupHTML(block){
+  let anyUnread=false;
+  let html='<div class="catchup-section"><h3>📋 Catch-up — Unread from This Block</h3>';
+
+  block.forEach(wkNum=>{
+    const w=cccPlan[wkNum];
+    const unread=[];
+    w.readings.forEach(r=>{
+      r.ch.forEach(c=>{
+        if(!isChapterRead(r.book,c)){
+          unread.push({book:r.book,ch:c});
+          anyUnread=true;
+        }
+      });
+    });
+
+    if(unread.length>0){
+      html+=`<div class="catchup-week-block">`;
+      html+=`<div class="catchup-week-title">Week ${wkNum} — ${w.title}</div>`;
+      // Group by book
+      const byBook={};
+      unread.forEach(u=>{
+        if(!byBook[u.book]) byBook[u.book]=[];
+        byBook[u.book].push(u.ch);
+      });
+      Object.entries(byBook).forEach(([book,chs])=>{
+        chs.sort((a,b)=>a-b);
+        html+=`<span class="catchup-item">${book} ${chs.join(', ')}</span>`;
+      });
+      html+=`</div>`;
+    } else {
+      html+=`<div class="catchup-week-block">`;
+      html+=`<div class="catchup-week-title">Week ${wkNum} — ${w.title}</div>`;
+      html+=`<span class="catchup-complete">✓ Complete</span>`;
+      html+=`</div>`;
+    }
+  });
+
+  if(!anyUnread){
+    html=`<div class="catchup-section"><h3>📋 Catch-up</h3><div class="catchup-all-done">🎉 You're all caught up — nothing to catch up on!</div>`;
+  }
+
+  html+='</div>';
+  return html;
+}
+
+function renderBlockMemoryHTML(block){
+  let html=`<div class="block-memory-section"><h3>📜 Memory Verses from This Block</h3><div class="block-memory-grid">`;
+  block.forEach(wkNum=>{
+    const w=cccPlan[wkNum];
+    const text=V[w.memory.key]||'';
+    html+=`
+      <div class="block-memory-card">
+        <div class="block-memory-card-week">Week ${wkNum}</div>
+        <div class="block-memory-card-title">${w.title}</div>
+        <div class="block-memory-card-ref">${w.memory.ref}</div>
+        <div class="block-memory-card-text">${text}</div>
+      </div>`;
+  });
+  html+='</div></div>';
+  return html;
+}
+
+function renderBlockOBTHTML(block){
+  let html=`<div class="block-obt-section"><h3>✏️ Your Reflections from This Block</h3>`;
+  block.forEach(wkNum=>{
+    const w=cccPlan[wkNum];
+    const saved=localStorage.getItem(`cccOBT_${wkNum}`)||'';
+    html+=`<div class="block-obt-entry">
+      <div class="block-obt-week">Week ${wkNum} — ${w.title}</div>
+      ${saved
+        ?`<div class="block-obt-text">"${saved}"</div>`
+        :`<div class="block-obt-empty">Nothing recorded for this week.</div>`
+      }
+    </div>`;
+  });
+  html+='</div>';
+  return html;
+}
+
+/* =========================================================
+   OBT (ONE BIG THING)
+   ========================================================= */
+function loadOBT(){
+  const textarea=document.getElementById('obtTextarea');
+  const saved=localStorage.getItem(`cccOBT_${currentWeek}`)||'';
+  textarea.value=saved;
+  updateOBTNote(saved);
+
+  textarea.oninput=function(){
+    localStorage.setItem(`cccOBT_${currentWeek}`,this.value);
+    updateOBTNote(this.value);
+  };
+}
+
+function updateOBTNote(val){
+  const note=document.getElementById('obtSavedNote');
+  note.textContent=val?'Saved ✓':'';
+}
+
+/* =========================================================
+   OVERALL PROGRESS
+   ========================================================= */
+function updateOverallProgress(){
+  const total=Object.values(bibleData).reduce((a,b)=>a+b,0);
+  const read=Object.values(readChapters).reduce((s,a)=>s+a.length,0);
+  const pct=(read/total*100).toFixed(1);
+  document.getElementById('overallPercent').textContent=`${pct}%`;
+  document.getElementById('overallProgressBar').style.width=`${pct}%`;
+  document.getElementById('chaptersRead').textContent=read;
+  const done=Object.keys(bibleData).filter(b=>{
+    const p=getBookProgress(b);
+    return p.read===p.total&&p.total>0;
+  }).length;
+  document.getElementById('booksCompleted').textContent=done;
+}
+
+/* =========================================================
+   CHAPTER / BOOK TRACKING
+   ========================================================= */
+function isChapterRead(book,ch){
+  return readChapters[book]&&readChapters[book].includes(ch);
+}
+
+function isChapterInCurrentWeek(book,ch){
+  const w=cccPlan[currentWeek];
+  if(w.isSabbath) return false;
+  return w.readings.some(r=>r.book===book&&r.ch.includes(ch));
+}
+
+function markChapterRead(book,ch,isRead){
+  if(!readChapters[book]) readChapters[book]=[];
+  if(isRead&&!readChapters[book].includes(ch)){
+    readChapters[book].push(ch);
+  } else if(!isRead){
+    readChapters[book]=readChapters[book].filter(x=>x!==ch);
+  }
+}
+
+function getBookProgress(book){
+  const total=bibleData[book];
+  const read=readChapters[book]?readChapters[book].length:0;
+  return{read,total,percent:read/total*100};
+}
+
+function renderBooks(){
+  const container=document.getElementById('booksContainer');
+  container.innerHTML='';
+  Object.keys(bibleData).forEach(book=>{
+    const p=getBookProgress(book);
+    const div=document.createElement('div');
+    div.className='book-item';
+    div.innerHTML=`
+      <div class="book-header" onclick="toggleBook('${book}')">
+        <span style="font-weight:600">${book}</span>
+        <span>${p.read}/${p.total}</span>
+      </div>
+      <div class="book-progress-bar">
+        <div class="book-progress-fill" style="width:${p.percent}%"></div>
+      </div>
+      <div class="chapters-view" id="chapters-${book}">
+        <div class="chapters-grid" id="grid-${book}"></div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function updateBookProgress(book){
+  const p=getBookProgress(book);
+  const header=document.querySelector(`#booksContainer .book-item .book-header`);
+  // Re-render just this book's header if needed — simpler to just update DOM directly
+  const bookItems=document.querySelectorAll('.book-item');
+  bookItems.forEach(item=>{
+    const nameEl=item.querySelector('.book-header span');
+    if(nameEl&&nameEl.textContent===book){
+      const countEl=item.querySelectorAll('.book-header span')[1];
+      if(countEl) countEl.textContent=`${p.read}/${p.total}`;
+      const fill=item.querySelector('.book-progress-fill');
+      if(fill) fill.style.width=`${p.percent}%`;
+    }
+  });
+}
+
+function toggleBook(book){
+  const view=document.getElementById(`chapters-${book}`);
+  if(!view) return;
+  if(view.classList.contains('open')){
+    view.classList.remove('open');
+  } else {
+    view.classList.add('open');
+    renderChapters(book);
+  }
+}
+
+function renderChapters(book){
+  const grid=document.getElementById(`grid-${book}`);
+  if(!grid) return;
+  grid.innerHTML='';
+  for(let i=1;i<=bibleData[book];i++){
+    const box=document.createElement('div');
+    box.className='chapter-box';
+    box.textContent=i;
+    if(isChapterRead(book,i)) box.classList.add('read');
+    if(isChapterInCurrentWeek(book,i)){
+      box.classList.add('current-week');
+    } else {
+      box.classList.add('not-current-week');
+    }
+    box.onclick=()=>{
+      const was=isChapterRead(book,i);
+      markChapterRead(book,i,!was);
+      saveToLocalStorage();
+      updateOverallProgress();
+      box.classList.toggle('read',!was);
+      updateBookProgress(book);
+      const w=cccPlan[currentWeek];
+      if(!w.isSabbath) updateMarkWeekButton(w);
+    };
+    grid.appendChild(box);
+  }
+}
+
+/* =========================================================
+   CONFETTI
+   ========================================================= */
+function launchConfetti(){
+  const colours=['#667eea','#764ba2','#f59e0b','#10b981','#ef4444','#3b82f6','#fbbf24','#a78bfa'];
+  const container=document.getElementById('confettiContainer');
+  container.innerHTML='';
+  for(let i=0;i<70;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    const size=Math.random()*10+5;
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      width:${size}px;
+      height:${size}px;
+      background:${colours[Math.floor(Math.random()*colours.length)]};
+      animation-delay:${Math.random()*0.6}s;
+      animation-duration:${Math.random()*1.5+2}s;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+    `;
+    container.appendChild(p);
+  }
+  setTimeout(()=>container.innerHTML='',3500);
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* =========================================================
+   SAVE / IMPORT PROGRESS
+   ========================================================= */
+function getAllNotes(){
+  const notes={};
+  for(let i=1;i<=65;i++){
+    const v=localStorage.getItem(`cccOBT_${i}`);
+    if(v) notes[i]=v;
+  }
+  return notes;
+}
+
+function saveProgressToFile(){
+  const notes=getAllNotes();
+  const data={
+    version:2,
+    appName:"CCC Bible Tracker",
+    savedAt:new Date().toISOString(),
+    currentWeek,
+    darkMode,
+    readChapters,
+    weekNotes:notes
+  };
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='CCC_Progress.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✅ Progress saved to CCC_Progress.json');
+}
+
+function importProgressFromFile(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.version||!data.readChapters){
+        showToast('❌ Not a valid CCC progress file.');
+        return;
+      }
+      // Restore state
+      readChapters=data.readChapters||{};
+      currentWeek=data.currentWeek||1;
+      darkMode=data.darkMode||false;
+
+      // Restore dark mode
+      if(darkMode){
+        document.documentElement.setAttribute('data-theme','dark');
+        document.getElementById('darkModeBtn').textContent='☀️';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('darkModeBtn').textContent='🌙';
+      }
+      localStorage.setItem('cccDarkMode',darkMode.toString());
+
+      // Restore notes
+      if(data.weekNotes){
+        Object.entries(data.weekNotes).forEach(([k,v])=>{
+          localStorage.setItem(`cccOBT_${k}`,v);
+        });
+      }
+
+      saveToLocalStorage();
+
+      // Update UI
+      document.getElementById('weekSelect').value=currentWeek;
+      updateWeek();
+      renderBooks();
+      updateOverallProgress();
+      showToast('✅ Progress imported successfully!');
+    }catch(err){
+      showToast('❌ Error reading file. Is it a valid CCC progress file?');
+    }
+  };
+  reader.readAsText(file);
+  // Reset input so same file can be re-imported
+  event.target.value='';
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+function resetProgress(){
+  if(!confirm('Reset ALL progress, notes, and saved data? This cannot be undone.')) return;
+  readChapters={};
+  currentWeek=1;
+  for(let i=1;i<=65;i++) localStorage.removeItem(`cccOBT_${i}`);
+  saveToLocalStorage();
+  document.getElementById('weekSelect').value=1;
+  updateWeek();
+  updateOverallProgress();
+  renderBooks();
+  showToast('Progress reset.');
+}
+
+/* =========================================================
+   START
+   ========================================================= */
+window.onload=init;
+</script>
+</body>
+</html>
